@@ -1,6 +1,5 @@
 package com.tientoan21.WebMovie.service;
 
-<<<<<<< HEAD
 import com.tientoan21.WebMovie.dto.reponse.UserReponse;
 import com.tientoan21.WebMovie.dto.request.UserRequest;
 import com.tientoan21.WebMovie.entity.User;
@@ -19,14 +18,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
     }
 
-    public User create(String email , String fullName, String rawPassword){
-        if(userRepository.existsByEmail(email)){
+    public User create(String email, String fullName, String rawPassword) {
+        if (userRepository.existsByEmail(email)) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         User user = new User();
@@ -38,16 +38,18 @@ public class UserService {
 
         return userRepository.save(user);
     }
-    public List<UserReponse> getAllUser(){
+
+    public List<UserReponse> getAllUser() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserReponse)
                 .collect(java.util.stream.Collectors.toList());
     }
-    public UserReponse update(Long id , UserRequest request){
+
+    public UserReponse update(Long id, UserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
-        if(!user.getIsActive()){
+        if (!user.getIsActive()) {
 
         }
         user.setFullName(request.fullName().trim());
@@ -55,8 +57,4 @@ public class UserService {
 
         return userMapper.toUserReponse(saved);
     }
-
-=======
-public class UserService {
->>>>>>> 859c35ef2ab098ed0363490ae62a0f1f28f79d4a
 }

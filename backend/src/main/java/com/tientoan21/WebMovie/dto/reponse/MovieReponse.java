@@ -1,11 +1,8 @@
 package com.tientoan21.WebMovie.dto.reponse;
 
-<<<<<<< HEAD
 import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record MovieReponse(
          String title,
@@ -24,8 +21,4 @@ public record MovieReponse(
         String posterUrl,
         String trailerUrl,
         String streamUrl
-) {
-=======
-public class MovieReponse {
->>>>>>> 859c35ef2ab098ed0363490ae62a0f1f28f79d4a
-}
+) {}

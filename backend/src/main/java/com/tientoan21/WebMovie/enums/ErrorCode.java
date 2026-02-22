@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
     VALIDATION_ERROR(1000, HttpStatus.BAD_REQUEST,"Validation failed"), //400
-<<<<<<< HEAD
     USER_NOT_FOUND(1001,HttpStatus.NOT_FOUND,"User not found"),
     MOVIE_NOT_FOUND(1002,HttpStatus.NOT_FOUND,"Movie not found"),//404
     MOVIE_EXISTED(1003,HttpStatus.CONFLICT,"Movie already exists"), //409
@@ -15,16 +14,6 @@ public enum ErrorCode {
     INTERNAL_ERROR(1005,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
     FORBIDDEN(1007,HttpStatus.FORBIDDEN,"Access denied"), //403
     INVALID_CREDENTIALS(1008,HttpStatus.BAD_REQUEST,"Invalid credentials"),
-    UNAUTHENTICATED(1009,HttpStatus.UNAUTHORIZED,"Unauthenticated"), //401
-=======
-    USER_NOT_FOUND(1001,HttpStatus.NOT_FOUND,"User not found"), //404
-    EMAIL_EXISTED(1002,HttpStatus.CONFLICT,"Email already exists"), //409
-    BAD_REQUEST(1004,HttpStatus.BAD_REQUEST,"Bad request"),//400
-    INTERNAL_ERROR(1005,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
-    FORBIDDEN(1006,HttpStatus.FORBIDDEN,"Access denied"), //403
-    INVALID_CREDENTIALS(1007,HttpStatus.BAD_REQUEST,"Invalid credentials"),
-    UNAUTHENTICATED(1008,HttpStatus.UNAUTHORIZED,"Unauthenticated"), //401
->>>>>>> 859c35ef2ab098ed0363490ae62a0f1f28f79d4a
     ;
 
     private final int code;
