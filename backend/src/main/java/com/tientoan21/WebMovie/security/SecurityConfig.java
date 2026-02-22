@@ -1,5 +1,6 @@
 package com.tientoan21.WebMovie.security;
 
+<<<<<<< HEAD
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,4 +40,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+=======
+public class SecurityConfig {
+>>>>>>> 859c35ef2ab098ed0363490ae62a0f1f28f79d4a
 }

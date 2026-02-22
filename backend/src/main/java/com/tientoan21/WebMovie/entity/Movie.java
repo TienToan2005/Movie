@@ -1,5 +1,6 @@
 package com.tientoan21.WebMovie.entity;
 
+<<<<<<< HEAD
 import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
@@ -72,3 +73,7 @@ public class Movie extends BaseEntity{
     private LocalDateTime deletedAt;
 
 }
+=======
+public class Movie {
+}
+>>>>>>> 859c35ef2ab098ed0363490ae62a0f1f28f79d4a
