@@ -1,10 +1,12 @@
-package com.tientoan21.WebMovie.dto.reponse;
+package com.tientoan21.WebMovie.dto.response;
 
 import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
 
-public record MovieReponse(
+import java.util.Set;
+
+public record MovieResponse(
          String title,
         String description,
          MovieStatus status,
@@ -16,7 +18,7 @@ public record MovieReponse(
         String language,
         String country,
         Integer year,
-        String category,
+        Set<CategoryResponse> categories,
         String actor,
         String posterUrl,
         String trailerUrl,

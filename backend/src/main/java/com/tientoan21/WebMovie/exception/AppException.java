@@ -15,6 +15,4 @@ public class AppException extends RuntimeException{
         super(message);
         this.errorCode = errorCode;
     }
-
-
 }

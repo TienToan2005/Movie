@@ -1,9 +1,10 @@
 package com.tientoan21.WebMovie.controller;
 
-import com.tientoan21.WebMovie.dto.reponse.ApiResponse;
-import com.tientoan21.WebMovie.dto.reponse.MovieReponse;
+import com.tientoan21.WebMovie.dto.response.ApiResponse;
+import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
 import com.tientoan21.WebMovie.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
-    private MovieService movieService;
+    private final MovieService movieService;
 
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
@@ -25,49 +26,49 @@ public class MovieController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<MovieReponse> createMovie(@RequestBody MovieRequest request){
-        MovieReponse movie = movieService.create(request);
+    public ApiResponse<MovieResponse> createMovie(@Valid @RequestBody MovieRequest request){
+        MovieResponse movie = movieService.create(request);
 
-        return ApiResponse.<MovieReponse>builder()
+        return ApiResponse.<MovieResponse>builder()
                 .success(true)
                 .data(movie)
                 .build();
     }
     @GetMapping("/all")
-    public ApiResponse<List<MovieReponse>> getAllMovie(){
-        List<MovieReponse> movies = movieService.getAllMovie();
-        return ApiResponse.<List<MovieReponse>>builder()
+    public ApiResponse<List<MovieResponse>> getAllMovie(){
+        List<MovieResponse> movies = movieService.getAllMovie();
+        return ApiResponse.<List<MovieResponse>>builder()
                 .success(true)
                 .data(movies)
                 .build();
     }
     @GetMapping
-    public ApiResponse<Page<MovieReponse>> getMovies(
+    public ApiResponse<Page<MovieResponse>> getMovies(
             @RequestParam(required = false) String keyword,
             @PageableDefault(size = 20) Pageable pageable
     ){
-        Page<MovieReponse> movies = movieService.getMoviePage(keyword, pageable);
+        Page<MovieResponse> movies = movieService.getMoviePage(keyword, pageable);
 
-        return ApiResponse.<Page<MovieReponse>>builder()
+        return ApiResponse.<Page<MovieResponse>>builder()
                 .success(true)
                 .data(movies)
                 .build();
     }
     @GetMapping("/{id}")
-    public ApiResponse<MovieReponse> getMovieById(@PathVariable Long id){
-        MovieReponse movie = movieService.getMovieById(id);
+    public ApiResponse<MovieResponse> getMovieById(@PathVariable Long id){
+        MovieResponse movie = movieService.getMovieById(id);
 
-        return ApiResponse.<MovieReponse>builder()
+        return ApiResponse.<MovieResponse>builder()
                 .success(true)
                 .data(movie)
                 .build();
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<MovieReponse> updateMovieBuId(@PathVariable Long id , @RequestBody MovieRequest request){
-        MovieReponse movie = movieService.updateMovieById(id, request);
+    public ApiResponse<MovieResponse> updateMovieBuId(@PathVariable Long id , @RequestBody MovieRequest request){
+        MovieResponse movie = movieService.updateMovieById(id, request);
 
-        return ApiResponse.<MovieReponse>builder()
+        return ApiResponse.<MovieResponse>builder()
                 .success(true)
                 .data(movie)
                 .build();

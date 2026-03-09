@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "movies")
@@ -24,18 +25,18 @@ public class Movie extends BaseEntity{
     private String title;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", columnDefinition = "VARCHAR(255)")
     private MovieStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "type", columnDefinition = "VARCHAR(255)")
     private MovieType type;
 
     @Column(length = 255)
     private String director;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "condition_status")
+    @Column(name = "condition_status", columnDefinition = "VARCHAR(255)")
     private ConditionStatus conditionStatus;
 
     @Lob
@@ -56,17 +57,23 @@ public class Movie extends BaseEntity{
     @Column(length = 255)
     private String country;
 
-    @Column(length = 255)
-    private String category;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "movie_category",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+        )
+    private Set<Category> categories;
 
     @Column(length = 255)
     private String actor;
 
     @Column(name = "poster_url", length = 500)
     private String posterUrl;
-
     @Column(name = "trailer_url", length = 500)
     private String trailerUrl;
+    @Column(name = "stream_url", length = 1000, nullable = false)
+    private String streamUrl;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

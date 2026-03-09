@@ -1,4 +1,4 @@
-package com.tientoan21.WebMovie.dto.reponse;
+package com.tientoan21.WebMovie.dto.response;
 
 import java.util.List;
 

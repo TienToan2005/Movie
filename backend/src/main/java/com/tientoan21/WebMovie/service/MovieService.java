@@ -1,7 +1,7 @@
 package com.tientoan21.WebMovie.service;
 
 
-import com.tientoan21.WebMovie.dto.reponse.MovieReponse;
+import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
 import com.tientoan21.WebMovie.entity.Movie;
 import com.tientoan21.WebMovie.enums.ErrorCode;
@@ -24,7 +24,7 @@ public class MovieService {
         this.movieMapper = movieMapper;
     }
 
-    public MovieReponse create(MovieRequest request){
+    public MovieResponse create(MovieRequest request){
         String title = request.title().trim();
         if (movieRepository.existsByTitleAndDeletedAtIsNull(title)) {
             throw new AppException(ErrorCode.MOVIE_EXISTED);
@@ -35,19 +35,19 @@ public class MovieService {
         Movie saved = movieRepository.save(movie);
         return movieMapper.toMovieReponse(saved);
     }
-    public List<MovieReponse> getAllMovie() {
+    public List<MovieResponse> getAllMovie() {
         return movieRepository.findAllByDeletedAtIsNull()
                 .stream()
                 .map(movieMapper::toMovieReponse)
                 .toList();
     }
-    public MovieReponse getMovieById(Long id){
+    public MovieResponse getMovieById(Long id){
         Movie movie = movieRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
         return movieMapper.toMovieReponse(movie);
     }
-    public Page<MovieReponse> getMoviePage(String keyword, Pageable pageable) {
+    public Page<MovieResponse> getMoviePage(String keyword, Pageable pageable) {
         Page<Movie> page;
 
         if (keyword != null && !keyword.isBlank()) {
@@ -59,7 +59,7 @@ public class MovieService {
         return page.map(movieMapper::toMovieReponse);
     }
 
-    public MovieReponse updateMovieById(Long id, MovieRequest request) {
+    public MovieResponse updateMovieById(Long id, MovieRequest request) {
         Movie movie = movieRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 

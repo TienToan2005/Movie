@@ -1,6 +1,6 @@
 package com.tientoan21.WebMovie.exception;
 
-import com.tientoan21.WebMovie.dto.reponse.ApiResponse;
+import com.tientoan21.WebMovie.dto.response.ApiResponse;
 import com.tientoan21.WebMovie.enums.ErrorCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

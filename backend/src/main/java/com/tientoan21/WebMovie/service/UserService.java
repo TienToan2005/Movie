@@ -1,6 +1,6 @@
 package com.tientoan21.WebMovie.service;
 
-import com.tientoan21.WebMovie.dto.reponse.UserReponse;
+import com.tientoan21.WebMovie.dto.response.UserResponse;
 import com.tientoan21.WebMovie.dto.request.UserRequest;
 import com.tientoan21.WebMovie.entity.User;
 import com.tientoan21.WebMovie.enums.ErrorCode;
@@ -39,13 +39,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<UserReponse> getAllUser() {
+    public List<UserResponse> getAllUser() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserReponse)
                 .collect(java.util.stream.Collectors.toList());
     }
 
-    public UserReponse update(Long id, UserRequest request) {
+    public UserResponse update(Long id, UserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
