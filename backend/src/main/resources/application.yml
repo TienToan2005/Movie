@@ -16,5 +16,10 @@ spring:
   flyway:
     enabled: true
 
+
+jwt:
+  signerKey: i82qo38cjnadsh76m69eojwwmd64fjev3d213gjvuqb7w330slh3dwvckqh98dkdbw9wheyotc3hpiqhu1xvkdp55s2hbh6fq935dn1jp9v0qs07auqo03ld0ym7s1kl42xlmht7uunx4qb8vazt8zj0vb5g4xc9p0163db9st43zbf0o5u7o34ku3yk44dl5wgm2sf8u9glgshir7udsd2o6fbo4jnnzbcnv0zhy9f78hw0tlsxj3v21kz517c
+  expiration: 86400000
+
 server:
   port: 8080

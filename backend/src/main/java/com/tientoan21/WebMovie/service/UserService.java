@@ -41,7 +41,7 @@ public class UserService {
 
     public List<UserResponse> getAllUser() {
         return userRepository.findAll().stream()
-                .map(userMapper::toUserReponse)
+                .map(userMapper::toUserResponse)
                 .collect(java.util.stream.Collectors.toList());
     }
 
@@ -55,6 +55,6 @@ public class UserService {
         user.setFullName(request.fullName().trim());
         User saved = userRepository.save(user);
 
-        return userMapper.toUserReponse(saved);
+        return userMapper.toUserResponse(saved);
     }
 }

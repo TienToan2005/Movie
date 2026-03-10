@@ -2,10 +2,16 @@ package com.tientoan21.WebMovie.entity;
 
 import com.tientoan21.WebMovie.enums.RoleUser;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class User extends BaseEntity{
     @Id
@@ -21,4 +27,5 @@ public class User extends BaseEntity{
     private RoleUser roleUser;
     @Column(name = "is_active")
     private Boolean isActive;
+
 }
