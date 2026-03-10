@@ -14,6 +14,7 @@ public enum ErrorCode {
     INTERNAL_ERROR(1005,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
     FORBIDDEN(1007,HttpStatus.FORBIDDEN,"Access denied"), //403
     INVALID_CREDENTIALS(1008,HttpStatus.BAD_REQUEST,"Invalid credentials"),
+    CATEGORY_NOT_FOUND(1002,HttpStatus.NOT_FOUND,"Category not found"),
     ;
 
     private final int code;

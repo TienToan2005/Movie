@@ -10,7 +10,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface MovieMapper {
-    MovieResponse toMovieReponse(Movie movie);
+    MovieResponse toMovieResponse(Movie movie);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deletedAt", ignore = true)
@@ -19,8 +19,7 @@ public interface MovieMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deletedAt", ignore = true)
-    @Mapping(target = "streamUrl", source = "streamUrl")
     @Mapping(target = "categories", ignore = true)
+    @Mapping(target = "streamUrl", source = "streamUrl")
     void updateEntity(@MappingTarget Movie movie, MovieRequest request);
-
 }

@@ -1,8 +1,10 @@
 package com.tientoan21.WebMovie.controller;
 
+import com.tientoan21.WebMovie.dto.request.MovieFilter;
 import com.tientoan21.WebMovie.dto.response.ApiResponse;
 import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
+import com.tientoan21.WebMovie.dto.response.PageResponse;
 import com.tientoan21.WebMovie.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -34,22 +36,14 @@ public class MovieController {
                 .data(movie)
                 .build();
     }
-    @GetMapping("/all")
-    public ApiResponse<List<MovieResponse>> getAllMovie(){
-        List<MovieResponse> movies = movieService.getAllMovie();
-        return ApiResponse.<List<MovieResponse>>builder()
-                .success(true)
-                .data(movies)
-                .build();
-    }
     @GetMapping
-    public ApiResponse<Page<MovieResponse>> getMovies(
-            @RequestParam(required = false) String keyword,
-            @PageableDefault(size = 20) Pageable pageable
-    ){
-        Page<MovieResponse> movies = movieService.getMoviePage(keyword, pageable);
+    public ApiResponse<PageResponse<MovieResponse>> getMovies(
+            MovieFilter filter,
+            @PageableDefault(page = 0, size = 10) Pageable pageable) {
 
-        return ApiResponse.<Page<MovieResponse>>builder()
+        PageResponse<MovieResponse> movies = movieService.getAllMovies(filter, pageable);
+
+        return ApiResponse.<PageResponse<MovieResponse>>builder()
                 .success(true)
                 .data(movies)
                 .build();

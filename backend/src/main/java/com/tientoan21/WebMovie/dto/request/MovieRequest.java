@@ -1,4 +1,6 @@
 package com.tientoan21.WebMovie.dto.request;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
@@ -10,10 +12,13 @@ import lombok.Builder;
 import java.util.Set;
 
 @Builder
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record MovieRequest(
-        @NotBlank String title,
+        @NotBlank(message = "TITLE_REQUIRED")
+        String title,
         String description,
-        @NotNull MovieStatus status,
+        @NotNull(message = "STATUS_REQUIRED")
+        MovieStatus status,
         MovieType type,
         ConditionStatus conditionStatus,
         Integer durationMinutes,
@@ -21,11 +26,12 @@ public record MovieRequest(
         String director,
         String language,
         String country,
-        @Min(value = 1) Integer year,
+        @Min(value = 1895, message = "INVALID_YEAR")
+        Integer year,
         Set<Long> categoryIds,
         String actor,
         String posterUrl,
         String trailerUrl,
-        @NotBlank(message = "streamUrl is required")
+        @NotBlank(message = "STREAM_URL_REQUIRED")
         String streamUrl
 ) { }
