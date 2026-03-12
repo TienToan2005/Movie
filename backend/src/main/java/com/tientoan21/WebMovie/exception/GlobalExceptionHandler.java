@@ -7,6 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
+import java.rmi.AccessException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(AppException.class)
@@ -25,7 +28,18 @@ public class GlobalExceptionHandler {
                         .error(error)
                         .build());
     }
-
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<Object>> handleAccessDeniedException(AccessDeniedException e) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        return ResponseEntity.status(errorCode.getHttpStatus())
+                .body(ApiResponse.builder()
+                        .success(false)
+                        .error(ApiError.builder()
+                                .code(errorCode.getCode())
+                                .message(errorCode.getMessage())
+                                .build())
+                        .build());
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Object>> handleValidation(MethodArgumentNotValidException ex) {
         String msg = ex.getBindingResult().getFieldErrors().stream()

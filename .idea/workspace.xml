@@ -5,23 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="097022f0-8233-4af0-843f-649fc95f6671" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/config/CustomUserDetailsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/config/UserDetails.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/request/LoginRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/TokenResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/JwtService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/AuthService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/UserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/UserResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/ApiResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/ApiResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/MovieStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/MovieStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/mapper/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/UserRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,8 +25,8 @@
         <option value="Enum" />
         <option value="com.intellij.jpb.FlywayMigrationScript" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Record" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -160,7 +150,9 @@
       <workItem from="1773070839089" duration="2419000" />
       <workItem from="1773073306784" duration="6020000" />
       <workItem from="1773101968800" duration="12629000" />
-      <workItem from="1773159776877" duration="5624000" />
+      <workItem from="1773159776877" duration="9761000" />
+      <workItem from="1773246871548" duration="2998000" />
+      <workItem from="1773281731686" duration="321000" />
     </task>
     <servers />
   </component>

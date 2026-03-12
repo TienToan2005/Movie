@@ -11,10 +11,11 @@ public enum ErrorCode {
     MOVIE_EXISTED(1003,HttpStatus.CONFLICT,"Movie already exists"), //409
     USER_EXISTED(1004,HttpStatus.CONFLICT,"User already exists"),
     BAD_REQUEST(1005,HttpStatus.BAD_REQUEST,"Bad request"),//400
-    INTERNAL_ERROR(1005,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
+    INTERNAL_ERROR(1006,HttpStatus.INTERNAL_SERVER_ERROR,"Internal server error"), //500
     FORBIDDEN(1007,HttpStatus.FORBIDDEN,"Access denied"), //403
     INVALID_CREDENTIALS(1008,HttpStatus.BAD_REQUEST,"Invalid credentials"),
-    CATEGORY_NOT_FOUND(1002,HttpStatus.NOT_FOUND,"Category not found"),
+    CATEGORY_NOT_FOUND(1009,HttpStatus.NOT_FOUND,"Category not found"),
+    UNAUTHORIZED(1100,HttpStatus.UNAUTHORIZED,"You do not have access")
     ;
 
     private final int code;

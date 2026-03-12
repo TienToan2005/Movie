@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 @Builder
 public class ApiResponse<T> {
-    private boolean success;
+    @Builder.Default
+    private boolean success = true;
     private T data;
     private ApiError error;
 }

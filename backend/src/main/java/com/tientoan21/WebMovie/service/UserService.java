@@ -8,10 +8,13 @@ import com.tientoan21.WebMovie.enums.RoleUser;
 import com.tientoan21.WebMovie.exception.AppException;
 import com.tientoan21.WebMovie.mapper.UserMapper;
 import com.tientoan21.WebMovie.repository.UserRepository;
+import org.slf4j.Logger;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -42,19 +45,36 @@ public class UserService {
     public List<UserResponse> getAllUser() {
         return userRepository.findAll().stream()
                 .map(userMapper::toUserResponse)
-                .collect(java.util.stream.Collectors.toList());
+                .collect(Collectors.toList());
     }
 
+    public UserResponse getMyInfo() {
+        try {
+            var auth = SecurityContextHolder.getContext().getAuthentication();
+            String email = auth.getName();
+
+            return userRepository.findByEmail(email)
+                    .map(userMapper::toUserResponse)
+                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        } catch (Exception e) {
+            throw e;
+        }
+    }
     public UserResponse update(Long id, UserRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         if (!user.getIsActive()) {
-
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
         user.setFullName(request.fullName().trim());
         User saved = userRepository.save(user);
 
         return userMapper.toUserResponse(saved);
+    }
+    public void delete(Long id){
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        user.setIsActive(false);
     }
 }
