@@ -4,19 +4,21 @@ import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 
 public class MovieSpecification {
     public static Specification<Movie> hasTitle(String title){
         return ((root, query, criteriaBuilder)
                 -> title == null ?
-                null : criteriaBuilder.like(root.get("title"), "%" + title + "%")
+                null : criteriaBuilder.like(root.get("title"), "%" + title.toLowerCase() + "%")
                 );
     }
     public static Specification<Movie> hasStatus(MovieStatus status) {
         return (root, query, cb) ->
                status  == null ? null :
-                        cb.equal(root.get("genre"), status);
+                        cb.equal(root.get("status"), status);
     }
     public static Specification<Movie> hasType(MovieType type) {
         return (root, query, cb) -> {
@@ -39,14 +41,18 @@ public class MovieSpecification {
         return (root, query, cb) -> {
             if (categoryId == null) return null;
 
-            query.distinct(true);
+            Subquery<Long> subquery = query.subquery(Long.class);
+            Root<Movie> subRoot = subquery.from(Movie.class);
+            Join<Movie, Category> subJoin = subRoot.join("categories");
 
-            Join<Movie, Category> join = root.join("categories");
-            return cb.equal(join.get("id"), categoryId);
+            subquery.select(subRoot.get("id"))
+                    .where(cb.and(
+                            cb.equal(subRoot.get("id"), root.get("id")),
+                            cb.equal(subJoin.get("id"), categoryId)
+                    ));
+
+            return cb.exists(subquery);
         };
-    }
-    public static Specification<Movie> notDeleted() {
-        return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
     }
     public static Specification<Movie> fetchCategories() {
         return (root, query, cb) -> {

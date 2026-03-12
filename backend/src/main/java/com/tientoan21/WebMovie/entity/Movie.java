@@ -5,18 +5,22 @@ import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "movies")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE movie SET deleted_at = NOW() WHERE id = ?")
+@Where(clause = "deleted_at IS NULL")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Movie extends BaseEntity{
+public class   Movie extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,7 +67,7 @@ public class Movie extends BaseEntity{
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
         )
-    private Set<Category> categories;
+    private Set<Category> categories = new HashSet<>();
 
     @Column(length = 255)
     private String actor;
@@ -75,6 +79,4 @@ public class Movie extends BaseEntity{
     @Column(name = "stream_url", length = 1000, nullable = false)
     private String streamUrl;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
 }

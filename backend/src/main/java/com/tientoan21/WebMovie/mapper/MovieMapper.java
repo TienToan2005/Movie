@@ -13,12 +13,10 @@ public interface MovieMapper {
     MovieResponse toMovieResponse(Movie movie);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "deletedAt", ignore = true)
     @Mapping(target = "categories", ignore = true)
     Movie toMovieEntity(MovieRequest request);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "deletedAt", ignore = true)
     @Mapping(target = "categories", ignore = true)
     @Mapping(target = "streamUrl", source = "streamUrl")
     void updateEntity(@MappingTarget Movie movie, MovieRequest request);

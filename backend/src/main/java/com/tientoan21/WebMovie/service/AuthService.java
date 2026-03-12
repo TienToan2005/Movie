@@ -46,7 +46,7 @@ public class AuthService {
     }
     public UserResponse register(RegisterRequest request){
         if(userRepository.existsByEmail(request.email())){
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
         User user = new User();

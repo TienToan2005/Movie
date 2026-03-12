@@ -21,6 +21,5 @@ public record MovieResponse(
         Set<CategoryResponse> categories,
         String actor,
         String posterUrl,
-        String trailerUrl,
-        String streamUrl
+        String trailerUrl
 ) {}

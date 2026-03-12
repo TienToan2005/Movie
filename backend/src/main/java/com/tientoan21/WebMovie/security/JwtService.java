@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class JwtService {
     @Value("${jwt.signerKey}")
-    private String singerKey;
+    private String signerKey;
     @Value("${jwt.expiration}")
     private long expiration;
 
@@ -26,16 +27,16 @@ public class JwtService {
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
                 .issuer("tientoan21.com")
-                .claim("scope", user.getRoleUser().name())
+                .claim("scope", List.of(user.getRoleUser().name()))
                 .issueTime(new Date())
-                .expirationTime(new Date(expiration + Instant.now().toEpochMilli()))
+                .expirationTime(new Date(Instant.now().plus(expiration,ChronoUnit.MILLIS).toEpochMilli()))
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
         // ky token
         JWSObject jwsObject = new JWSObject(header,payload);
         try {
-            jwsObject.sign(new MACSigner(singerKey.getBytes()));
+            jwsObject.sign(new MACSigner(signerKey.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
             e.printStackTrace();

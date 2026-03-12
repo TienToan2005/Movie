@@ -8,7 +8,7 @@ import com.tientoan21.WebMovie.enums.RoleUser;
 import com.tientoan21.WebMovie.exception.AppException;
 import com.tientoan21.WebMovie.mapper.UserMapper;
 import com.tientoan21.WebMovie.repository.UserRepository;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;

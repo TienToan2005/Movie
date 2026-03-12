@@ -5,13 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="097022f0-8233-4af0-843f-649fc95f6671" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/config/AuditorAwareImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V3__add_deleted_at_to_category.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d8b132cd-88ed-4d4d-b1bb-013cee1e486b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d8b132cd-88ed-4d4d-b1bb-013cee1e486b.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/config/JpaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/config/JpaConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/MovieController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/ApiResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/ApiResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/MovieStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/MovieStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/MovieResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/MovieResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/BaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/BaseEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/MovieSpecification.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/MovieSpecification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/mapper/MovieMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/mapper/MovieMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/MovieRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/MovieService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +165,9 @@
       <workItem from="1773101968800" duration="12629000" />
       <workItem from="1773159776877" duration="9761000" />
       <workItem from="1773246871548" duration="2998000" />
-      <workItem from="1773281731686" duration="321000" />
+      <workItem from="1773281731686" duration="4675000" />
+      <workItem from="1773315091165" duration="6314000" />
+      <workItem from="1773324233869" duration="986000" />
     </task>
     <servers />
   </component>

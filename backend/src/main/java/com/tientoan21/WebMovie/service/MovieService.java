@@ -57,9 +57,7 @@ public class MovieService {
     public PageResponse<MovieResponse> getAllMovies(MovieFilter filter, Pageable pageable) {
 
         Specification<Movie> spec = Specification
-                .where(MovieSpecification.fetchCategories())
-                .and(MovieSpecification.notDeleted())
-                .and(MovieSpecification.hasTitle(filter.title()))
+                .where(MovieSpecification.hasTitle(filter.title()))
                 .and(MovieSpecification.hasStatus(filter.status()))
                 .and(MovieSpecification.hasType(filter.type()))
                 .and(MovieSpecification.hasCountry(filter.country()))
