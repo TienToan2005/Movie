@@ -14,9 +14,7 @@ import com.tientoan21.WebMovie.mapper.MovieMapper;
 import com.tientoan21.WebMovie.repository.CategoryRepository;
 import com.tientoan21.WebMovie.repository.MovieRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +34,7 @@ public class MovieService {
         this.categoryRepository = categoryRepository;
     }
     @Transactional
-    public MovieResponse create(MovieRequest request){
+    public MovieResponse create(MovieRequest request,String posterUrl){
         String title = request.title().trim();
         if (movieRepository.existsByTitleAndDeletedAtIsNull(title)) {
             throw new AppException(ErrorCode.MOVIE_EXISTED);
@@ -50,6 +48,7 @@ public class MovieService {
             movie.setCategories(new HashSet<>(categories));
         }
         movie.setTitle(title);
+        movie.setPosterUrl(posterUrl);
 
         Movie saved = movieRepository.save(movie);
         return movieMapper.toMovieResponse(saved);

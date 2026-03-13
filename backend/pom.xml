@@ -72,6 +72,13 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Cloud Storage/ File Storage -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.36.0</version>
+		</dependency>
+
 		<!-- Flyway -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>

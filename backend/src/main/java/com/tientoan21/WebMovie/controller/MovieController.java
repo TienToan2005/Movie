@@ -5,34 +5,52 @@ import com.tientoan21.WebMovie.dto.response.ApiResponse;
 import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
 import com.tientoan21.WebMovie.dto.response.PageResponse;
+import com.tientoan21.WebMovie.service.CloudinaryService;
 import com.tientoan21.WebMovie.service.MovieService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-
-
+@Slf4j
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
     private final MovieService movieService;
+    private final CloudinaryService cloudinaryService;
 
-    public MovieController(MovieService movieService) {
+    public MovieController(MovieService movieService, CloudinaryService cloudinaryService) {
         this.movieService = movieService;
+        this.cloudinaryService = cloudinaryService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<MovieResponse> createMovie(@Valid @RequestBody MovieRequest request){
-        MovieResponse movie = movieService.create(request);
+    public ApiResponse<MovieResponse> createMovie(
+            @Valid @RequestPart("data") MovieRequest request,
+            @RequestPart("poster")MultipartFile posterFile){
 
-        return ApiResponse.<MovieResponse>builder()
-                .success(true)
-                .data(movie)
-                .build();
+        try {
+            log.info("Bắt đầu nhận request create movie..."); // Để xem nó có vào được đến đây không
+
+            String posterUrl = cloudinaryService.uploadFile(posterFile, "poster");
+            log.info("Upload ảnh thành công: {}", posterUrl);
+
+            MovieResponse movie = movieService.create(request, posterUrl);
+
+            return ApiResponse.<MovieResponse>builder()
+                    .success(true)
+                    .data(movie)
+                    .build();
+        } catch (Exception e) {
+            log.error("LỖI TẠI CONTROLLER: ", e); // Dòng này sẽ ép lỗi hiện ra Console
+            throw e;
+        }
     }
     @GetMapping
     public ApiResponse<PageResponse<MovieResponse>> getMovies(

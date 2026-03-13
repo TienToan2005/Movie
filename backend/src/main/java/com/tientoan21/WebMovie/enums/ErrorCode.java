@@ -15,7 +15,8 @@ public enum ErrorCode {
     FORBIDDEN(1007,HttpStatus.FORBIDDEN,"Access denied"), //403
     INVALID_CREDENTIALS(1008,HttpStatus.BAD_REQUEST,"Invalid credentials"),
     CATEGORY_NOT_FOUND(1009,HttpStatus.NOT_FOUND,"Category not found"),
-    UNAUTHORIZED(1100,HttpStatus.UNAUTHORIZED,"You do not have access")
+    UNAUTHORIZED(1010,HttpStatus.UNAUTHORIZED,"You do not have access"),
+    UPLOAD_FAILED(1011,HttpStatus.MULTI_STATUS,"upload failed")
     ;
 
     private final int code;
