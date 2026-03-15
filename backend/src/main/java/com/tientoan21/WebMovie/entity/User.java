@@ -6,6 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.mapstruct.Mapper;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,5 +31,13 @@ public class User extends BaseEntity{
     private RoleUser roleUser;
     @Column(name = "is_active")
     private Boolean isActive;
+
+    @ManyToMany
+    @JoinTable(
+            name = "watchlist",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    private Set<Movie> favoriteMovies = new HashSet<>();
 
 }

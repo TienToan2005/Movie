@@ -36,7 +36,7 @@ public class UserController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ApiResponse<UserResponse> update(Long id , UserRequest request){
+    public ApiResponse<UserResponse> update(@PathVariable Long id , UserRequest request){
         var user = userService.update(id, request);
 
         return ApiResponse.<UserResponse>builder()
@@ -44,8 +44,8 @@ public class UserController {
                 .build();
     }
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping
-    public ResponseEntity<?> delete(Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }

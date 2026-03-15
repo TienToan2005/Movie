@@ -1,0 +1,2 @@
+ALTER TABLE reviews ADD COLUMN deleted_at DATETIME NULL;
+ALTER TABLE reviews ADD COLUMN deleted_by VARCHAR(255) NULL;

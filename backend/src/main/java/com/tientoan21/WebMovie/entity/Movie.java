@@ -9,6 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -79,4 +80,11 @@ public class   Movie extends BaseEntity{
     @Column(name = "stream_url", length = 1000, nullable = false)
     private String streamUrl;
 
+    private Double averageRating = 0.0;
+    private Integer totalReviews = 0;
+    @OneToMany(mappedBy = "movie" , cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
+    @ManyToMany(mappedBy = "favoriteMovies")
+    private Set<User> favoriteUsers = new HashSet<>();
 }

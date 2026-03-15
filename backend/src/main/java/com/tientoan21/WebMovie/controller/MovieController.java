@@ -35,22 +35,13 @@ public class MovieController {
             @Valid @RequestPart("data") MovieRequest request,
             @RequestPart("poster")MultipartFile posterFile){
 
-        try {
-            log.info("Bắt đầu nhận request create movie..."); // Để xem nó có vào được đến đây không
-
             String posterUrl = cloudinaryService.uploadFile(posterFile, "poster");
-            log.info("Upload ảnh thành công: {}", posterUrl);
 
             MovieResponse movie = movieService.create(request, posterUrl);
 
             return ApiResponse.<MovieResponse>builder()
-                    .success(true)
                     .data(movie)
                     .build();
-        } catch (Exception e) {
-            log.error("LỖI TẠI CONTROLLER: ", e); // Dòng này sẽ ép lỗi hiện ra Console
-            throw e;
-        }
     }
     @GetMapping
     public ApiResponse<PageResponse<MovieResponse>> getMovies(
@@ -60,7 +51,6 @@ public class MovieController {
         PageResponse<MovieResponse> movies = movieService.getAllMovies(filter, pageable);
 
         return ApiResponse.<PageResponse<MovieResponse>>builder()
-                .success(true)
                 .data(movies)
                 .build();
     }
@@ -69,7 +59,6 @@ public class MovieController {
         MovieResponse movie = movieService.getMovieById(id);
 
         return ApiResponse.<MovieResponse>builder()
-                .success(true)
                 .data(movie)
                 .build();
     }
@@ -79,7 +68,6 @@ public class MovieController {
         MovieResponse movie = movieService.updateMovieById(id, request);
 
         return ApiResponse.<MovieResponse>builder()
-                .success(true)
                 .data(movie)
                 .build();
     }

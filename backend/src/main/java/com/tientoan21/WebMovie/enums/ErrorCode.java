@@ -16,7 +16,10 @@ public enum ErrorCode {
     INVALID_CREDENTIALS(1008,HttpStatus.BAD_REQUEST,"Invalid credentials"),
     CATEGORY_NOT_FOUND(1009,HttpStatus.NOT_FOUND,"Category not found"),
     UNAUTHORIZED(1010,HttpStatus.UNAUTHORIZED,"You do not have access"),
-    UPLOAD_FAILED(1011,HttpStatus.MULTI_STATUS,"upload failed")
+    UPLOAD_FAILED(1011,HttpStatus.MULTI_STATUS,"upload failed"),
+    USER_ALREADY_REVIEWED(1012,HttpStatus.BAD_REQUEST,"Users have reviewed the movie."),
+    REVIEW_NOT_FOUND(1013,HttpStatus.NOT_FOUND,"Review not found"),
+    UNAUTHORIZED_ACTION(1014,HttpStatus.UNAUTHORIZED,"You do not have action")
     ;
 
     private final int code;

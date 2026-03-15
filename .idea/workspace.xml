@@ -5,14 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="097022f0-8233-4af0-843f-649fc95f6671" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/config/CloudinaryConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/CloudinaryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/ReviewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/WatchlistController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/request/ReviewMovieRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/request/ReviewRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/dto/response/ReviewResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/Review.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/mapper/ReviewMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/mapper/WatchlistMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/ReviewRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/ReviewService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/WatchlistService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V4__create_table_reviews.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V5__create_table_watchlist.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/db/migration/V6__add_delete_at_by.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/d8b132cd-88ed-4d4d-b1bb-013cee1e486b.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/d8b132cd-88ed-4d4d-b1bb-013cee1e486b.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/MovieController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/MovieController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/Movie.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/Movie.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/enums/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/MovieService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/service/MovieService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/MovieRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/repository/MovieRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/tientoan21/WebMovie/security/SecurityConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +42,9 @@
         <option value="Exception" />
         <option value="Enum" />
         <option value="com.intellij.jpb.FlywayMigrationScript" />
-        <option value="Interface" />
         <option value="Record" />
+        <option value="Spring Repository" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -168,7 +186,13 @@
       <workItem from="1773315091165" duration="6314000" />
       <workItem from="1773324233869" duration="986000" />
       <workItem from="1773330941144" duration="5415000" />
-      <workItem from="1773417531654" duration="2804000" />
+      <workItem from="1773417531654" duration="7090000" />
+      <workItem from="1773472671050" duration="3658000" />
+      <workItem from="1773476475925" duration="1840000" />
+      <workItem from="1773496758032" duration="7459000" />
+      <workItem from="1773505673615" duration="355000" />
+      <workItem from="1773506374581" duration="3617000" />
+      <workItem from="1773591147026" duration="963000" />
     </task>
     <servers />
   </component>
