@@ -1,5 +1,7 @@
 package com.tientoan21.WebMovie.repository;
 
+import com.tientoan21.WebMovie.dto.response.DashboardResponse;
+import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecificationExecutor<Movie> {
@@ -26,4 +29,22 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
 
     @Query("SELECT m from Movie m join m.favoriteUsers u where u.email = :email")
     Page<Movie> findAllByFavoriteUsersEmail(@Param("email") String email, Pageable pageable);
+
+    @Query("select distinct m from  Movie m " +
+            "join m.categories c " +
+            "where c.id in :categoryIds " +
+            "and m.id <> :currentMovieId " +
+            "order by m.averageRating desc "
+    )
+    List<Movie> findRelatedMovies(@Param("categoryIds") Set<Long> categoryIds,
+                                          @Param("currentMovieId") Long currentMovieId,
+                                          Pageable pageable);
+
+    @Query("""
+       select c.name as name,
+              count(m) as count
+       from Movie m join m.categories c
+       group by c.name
+       """)
+    List<DashboardResponse.CategoryStats> getCategoryStats();
 }

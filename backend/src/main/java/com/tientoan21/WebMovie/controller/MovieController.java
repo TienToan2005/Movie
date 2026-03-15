@@ -17,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/movies")
@@ -76,5 +78,12 @@ public class MovieController {
     public ResponseEntity<?> delete(@PathVariable Long id){
         movieService.deleteMovieById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}/recommendations")
+    public ApiResponse<List<MovieResponse>> getRecommendedMovies(@PathVariable Long id){
+        return ApiResponse.<List<MovieResponse>>builder()
+                .data(movieService.getRecommendedMovies(id))
+                .build();
     }
 }

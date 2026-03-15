@@ -14,6 +14,7 @@ import com.tientoan21.WebMovie.mapper.MovieMapper;
 import com.tientoan21.WebMovie.repository.CategoryRepository;
 import com.tientoan21.WebMovie.repository.MovieRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
@@ -80,6 +83,19 @@ public class MovieService {
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
         return movieMapper.toMovieResponse(movie);
+    }
+    public List<MovieResponse> getRecommendedMovies(Long movieId){
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
+
+        Set<Long> categoryIds = movie.getCategories().stream()
+                .map(Category::getId)
+                .collect(Collectors.toSet());
+
+        return movieRepository.findRelatedMovies(categoryIds,movieId, PageRequest.of(0,6))
+                .stream()
+                .map(movieMapper::toMovieResponse)
+                .toList();
     }
     @Transactional
     public MovieResponse updateMovieById(Long id, MovieRequest request) {
