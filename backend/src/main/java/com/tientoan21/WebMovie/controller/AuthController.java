@@ -1,8 +1,10 @@
 package com.tientoan21.WebMovie.controller;
 
 import com.tientoan21.WebMovie.dto.request.LoginRequest;
+import com.tientoan21.WebMovie.dto.request.RefreshTokenRequest;
 import com.tientoan21.WebMovie.dto.request.RegisterRequest;
 import com.tientoan21.WebMovie.dto.response.ApiResponse;
+import com.tientoan21.WebMovie.dto.response.RefreshTokenResponse;
 import com.tientoan21.WebMovie.dto.response.TokenResponse;
 import com.tientoan21.WebMovie.dto.response.UserResponse;
 import com.tientoan21.WebMovie.service.AuthService;
@@ -33,5 +35,8 @@ public class AuthController {
                 .data(user)
                 .build();
     }
-
+    @PostMapping("/refresh")
+    public RefreshTokenResponse refresh(@RequestBody RefreshTokenRequest request) {
+        return authService.refreshToken(request.refreshToken());
+    }
 }
