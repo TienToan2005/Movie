@@ -3,8 +3,10 @@ CREATE TABLE category (
                           name VARCHAR(255) NOT NULL UNIQUE,
                           created_at DATETIME NULL,
                           updated_at DATETIME NULL,
+                          deleted_at DATETIME NULL,
                           created_by VARCHAR(255) NULL,
-                          updated_by VARCHAR(255) NULL
+                          updated_by VARCHAR(255) NULL,
+                          deleted_by VARCHAR(255) NULL
 );
 
 CREATE TABLE movie_category (

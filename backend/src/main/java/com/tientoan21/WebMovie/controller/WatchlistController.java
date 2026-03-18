@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/movies/watchlist")
+@RequestMapping("/api/users/watchlist")
 @RequiredArgsConstructor
 public class WatchlistController {
     private final WatchlistService watchlistService;

@@ -21,8 +21,8 @@ public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "full_name")
-    private String fullName;
+    @Column(name = "username")
+    private String username;
     private String email;
     @Column(name = "password_hash")
     private String passwordHash;

@@ -31,5 +31,16 @@ jwt:
   signerKey: ${JWT_SECRET}
   expiration: ${EXPIRATION_KEY}
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG    # Xem chi tiết quá trình lọc (Filter) và chặn (Deny)
+        web:
+          client:
+            RestTemplate: DEBUG
+    com:
+      nimbusds: DEBUG      # Nếu muốn soi kỹ lỗi giải mã JWT của thư viện Nimbus
+
 server:
   port: 8080

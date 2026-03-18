@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
-    @Mapping(source = "user.fullName", target = "userFullName")
+    @Mapping(source = "user.username", target = "username")
     ReviewResponse toReviewResponse(Review review);
 }

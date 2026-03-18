@@ -7,6 +7,7 @@ import com.tientoan21.WebMovie.enums.MovieType;
 import java.util.Set;
 
 public record MovieResponse(
+        Long id,
          String title,
         String description,
          MovieStatus status,

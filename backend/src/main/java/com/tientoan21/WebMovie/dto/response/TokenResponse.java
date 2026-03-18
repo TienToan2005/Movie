@@ -6,5 +6,7 @@ import lombok.Builder;
 public record TokenResponse(
     String accessToken,
     String refreshToken,
+    String username,
+    String email,
     boolean authenticated
 ){}

@@ -29,9 +29,10 @@ public class JwtService {
 
         //payload
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getEmail())
+                .subject(user.getUsername())
                 .issuer("tientoan21.com")
-                .claim("scope", List.of(user.getRoleUser().name()))
+                .claim("email", user.getEmail())
+                .claim("scope", user.getRoleUser().name())
                 .issueTime(new Date())
                 .expirationTime(new Date(Instant.now().plus(expiration,ChronoUnit.MILLIS).toEpochMilli()))
                 .build();

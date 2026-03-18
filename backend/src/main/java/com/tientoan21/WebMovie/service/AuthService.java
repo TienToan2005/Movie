@@ -33,7 +33,7 @@ public class AuthService {
     }
 
     public TokenResponse login(LoginRequest request) {
-        var user = userRepository.findByEmail(request.email())
+        var user = userRepository.findByUsername(request.username())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean authen = passwordEncoder.matches(request.password(), user.getPasswordHash());
@@ -45,17 +45,22 @@ public class AuthService {
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken.getToken())
+                .username(user.getUsername())
+                .email(user.getEmail())
                 .authenticated(true)
                 .build();
     }
 
     public UserResponse register(RegisterRequest request) {
-        if (userRepository.existsByEmail(request.email())) {
+        if (userRepository.existsByUsername(request.username())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
 
+        if (userRepository.existsByEmail(request.email())) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
         User user = new User();
-        user.setFullName(request.fullName());
+        user.setUsername(request.username());
         user.setEmail(request.email());
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setRoleUser(RoleUser.CUSTOMER);

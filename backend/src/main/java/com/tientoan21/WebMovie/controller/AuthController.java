@@ -8,6 +8,7 @@ import com.tientoan21.WebMovie.dto.response.RefreshTokenResponse;
 import com.tientoan21.WebMovie.dto.response.TokenResponse;
 import com.tientoan21.WebMovie.dto.response.UserResponse;
 import com.tientoan21.WebMovie.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class AuthController {
                 .build();
     }
     @PostMapping("/register")
-    public ApiResponse<UserResponse> register(@RequestBody RegisterRequest request){
+    public ApiResponse<UserResponse> register(@Valid @RequestBody RegisterRequest request){
         UserResponse user = authService.register(request);
         return ApiResponse.<UserResponse>builder()
                 .data(user)

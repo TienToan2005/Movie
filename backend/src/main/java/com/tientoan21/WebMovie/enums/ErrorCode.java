@@ -19,7 +19,8 @@ public enum ErrorCode {
     UPLOAD_FAILED(1011,HttpStatus.MULTI_STATUS,"upload failed"),
     USER_ALREADY_REVIEWED(1012,HttpStatus.BAD_REQUEST,"Users have reviewed the movie."),
     REVIEW_NOT_FOUND(1013,HttpStatus.NOT_FOUND,"Review not found"),
-    UNAUTHORIZED_ACTION(1014,HttpStatus.UNAUTHORIZED,"You do not have action")
+    UNAUTHORIZED_ACTION(1014,HttpStatus.UNAUTHORIZED,"You do not have action"),
+    EMAIL_EXISTED(1015,HttpStatus.CONFLICT,"Email already exists")
     ;
 
     private final int code;

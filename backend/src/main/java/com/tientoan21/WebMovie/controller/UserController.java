@@ -23,7 +23,7 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ApiResponse<?> create(@RequestBody RegisterRequest request){
-        User user = userService.create(request.email(), request.fullName(), request.password());
+        User user = userService.create(request.email(), request.username(), request.password());
         return ApiResponse.<User>builder()
                 .data(user)
                 .build();

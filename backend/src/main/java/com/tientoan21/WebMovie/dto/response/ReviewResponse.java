@@ -9,6 +9,6 @@ public record ReviewResponse(
         Long id,
         Integer rating,
         String content,
-        String userFullName,
+        String username,
         LocalDateTime createdAt
 ) {}

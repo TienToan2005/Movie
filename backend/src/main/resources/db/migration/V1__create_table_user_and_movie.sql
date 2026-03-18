@@ -1,15 +1,16 @@
 CREATE TABLE users (
                        id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                       full_name VARCHAR(255) NOT NULL,
+                       username VARCHAR(255) NOT NULL UNIQUE ,
                        email VARCHAR(255) NOT NULL UNIQUE,
                        password_hash VARCHAR(255) NOT NULL,
                        role VARCHAR(50) NOT NULL, -- Chuyển sang VARCHAR để linh hoạt
                        is_active BOOLEAN NOT NULL DEFAULT TRUE,
+                       created_at DATETIME NULL,
+                       updated_at DATETIME NULL,
                        deleted_at DATETIME NULL,
                        created_by VARCHAR(255) NULL,
                        updated_by VARCHAR(255) NULL,
-                       created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                       updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                       deleted_by VARCHAR(255) NULL
 );
 
 CREATE TABLE movies (
@@ -28,10 +29,13 @@ CREATE TABLE movies (
                         actor VARCHAR(255),
                         poster_url VARCHAR(500),
                         trailer_url VARCHAR(500),
+                        average_rating DOUBLE DEFAULT 0.0,
+                        total_reviews INT DEFAULT 0,
                         stream_url VARCHAR(1000) NOT NULL,
+                        created_at DATETIME NULL,
+                        updated_at DATETIME NULL,
                         deleted_at DATETIME NULL,
                         created_by VARCHAR(255) NULL,
                         updated_by VARCHAR(255) NULL,
-                        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                        deleted_by VARCHAR(255) NULL
 );

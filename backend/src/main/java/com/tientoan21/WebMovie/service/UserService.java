@@ -29,14 +29,17 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public User create(String email, String fullName, String rawPassword) {
+    public User create(String email, String username, String rawPassword) {
         if (userRepository.existsByEmail(email)) {
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+        if(userRepository.existsByUsername(username)) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
         User user = new User();
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(rawPassword));
-        user.setFullName(fullName);
+        user.setUsername(username);
         user.setRoleUser(RoleUser.CUSTOMER);
         user.setIsActive(true);
 
@@ -52,9 +55,10 @@ public class UserService {
     public UserResponse getMyInfo() {
         try {
             var auth = SecurityContextHolder.getContext().getAuthentication();
-            String email = auth.getName();
+            String username = auth.getName();
 
-            return userRepository.findByEmail(email)
+            return userRepository.findByUsername(username)
+                    .or(() -> userRepository.findByEmail(username))
                     .map(userMapper::toUserResponse)
                     .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         } catch (Exception e) {
@@ -68,7 +72,7 @@ public class UserService {
         if (!user.getIsActive()) {
             throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
-        user.setFullName(request.fullName().trim());
+        user.setUsername(request.username().trim());
         User saved = userRepository.save(user);
 
         return userMapper.toUserResponse(saved);

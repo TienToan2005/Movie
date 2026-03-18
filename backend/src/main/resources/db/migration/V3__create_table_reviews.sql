@@ -4,10 +4,12 @@ CREATE TABLE reviews (
                          content TEXT NOT NULL,
                          movie_id BIGINT NOT NULL,
                          user_id BIGINT NOT NULL,
-                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                         created_by VARCHAR(255),
-                         updated_by VARCHAR(255),
+                         created_at DATETIME NULL,
+                         updated_at DATETIME NULL,
+                         deleted_at DATETIME NULL,
+                         created_by VARCHAR(255) NULL,
+                         updated_by VARCHAR(255) NULL,
+                         deleted_by VARCHAR(255) NULL,
 
                          CONSTRAINT fk_reviews_movie FOREIGN KEY (movie_id) REFERENCES movies(id),
 
@@ -15,7 +17,3 @@ CREATE TABLE reviews (
 
                          CONSTRAINT uc_user_movie UNIQUE (user_id, movie_id)
 );
-
-
-ALTER TABLE movies ADD COLUMN average_rating DOUBLE DEFAULT 0.0;
-ALTER TABLE movies ADD COLUMN total_reviews INTEGER DEFAULT 0;
