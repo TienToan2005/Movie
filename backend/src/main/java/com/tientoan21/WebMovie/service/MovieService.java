@@ -2,8 +2,10 @@ package com.tientoan21.WebMovie.service;
 
 
 import com.tientoan21.WebMovie.dto.request.MovieFilter;
-import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
+import com.tientoan21.WebMovie.dto.response.ActorResponse;
+import com.tientoan21.WebMovie.dto.response.MovieMetadataResponse;
+import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.response.PageResponse;
 import com.tientoan21.WebMovie.entity.Category;
 import com.tientoan21.WebMovie.entity.Movie;
@@ -13,12 +15,12 @@ import com.tientoan21.WebMovie.exception.AppException;
 import com.tientoan21.WebMovie.mapper.MovieMapper;
 import com.tientoan21.WebMovie.repository.CategoryRepository;
 import com.tientoan21.WebMovie.repository.MovieRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -31,18 +33,23 @@ public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final CategoryRepository categoryRepository;
-    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, CategoryRepository categoryRepository) {
+    private final TmdbService tmdbService;
+    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, CategoryRepository categoryRepository, TmdbService tmdbService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.categoryRepository = categoryRepository;
+        this.tmdbService = tmdbService;
     }
+
     @Transactional
-    public MovieResponse create(MovieRequest request,String posterUrl){
+    public MovieResponse create(MovieRequest request) {
         String title = request.title().trim();
         if (movieRepository.existsByTitleAndDeletedAtIsNull(title)) {
             throw new AppException(ErrorCode.MOVIE_EXISTED);
         }
+
         Movie movie = movieMapper.toMovieEntity(request);
+
         if (request.categoryIds() != null && !request.categoryIds().isEmpty()) {
             List<Category> categories = categoryRepository.findAllById(request.categoryIds());
             if (categories.size() != request.categoryIds().size()) {
@@ -50,12 +57,36 @@ public class MovieService {
             }
             movie.setCategories(new HashSet<>(categories));
         }
-        movie.setTitle(title);
-        movie.setPosterUrl(posterUrl);
+
+        MovieMetadataResponse fullData = tmdbService.getMetadata(title);
+
+        if (fullData != null) {
+            if (movie.getPosterUrl() == null) movie.setPosterUrl(fullData.posterUrl());
+            if (movie.getTrailerUrl() == null) movie.setTrailerUrl(fullData.trailerUrl());
+            if (movie.getDescription() == null) movie.setDescription(fullData.overview());
+            if (movie.getYear() == null) movie.setYear(fullData.year());
+            if (movie.getCountry() == null || "N/A".equals(movie.getCountry())) movie.setCountry(fullData.country());
+            if (movie.getAverageRating() == null || movie.getAverageRating() == 0.0) movie.setAverageRating(fullData.voteAverage());
+            if (movie.getDirector() == null) movie.setDirector(fullData.director());
+
+            if (fullData.actors() != null && !fullData.actors().isEmpty()) {
+                List<ActorResponse> actorRecords = fullData.actors().stream()
+                        .map(a -> new ActorResponse(a.getName(), a.getProfileUrl()))
+                        .collect(Collectors.toList());
+                movie.setActors(actorRecords);
+            }
+        }
 
         Movie saved = movieRepository.save(movie);
-        return movieMapper.toMovieResponse(saved);
+
+        MovieResponse response = movieMapper.toMovieResponse(saved);
+        response.setActors(saved.getActors().stream()
+                .map(a -> new ActorResponse(a.getName(), a.getProfileUrl()))
+                .collect(Collectors.toList()));
+
+        return response;
     }
+
     public PageResponse<MovieResponse> getAllMovies(MovieFilter filter, Pageable pageable) {
 
         Specification<Movie> spec = Specification
@@ -78,11 +109,19 @@ public class MovieService {
                         .getContent())
                 .build();
     }
-    public MovieResponse getMovieById(Long id){
-        Movie movie = movieRepository.findByIdAndDeletedAtIsNull(id)
+
+    @Transactional(readOnly = true)
+    public MovieResponse getMovieById(Long id) {
+        Movie movie = movieRepository.findByIdWithActors(id)
                 .orElseThrow(() -> new AppException(ErrorCode.MOVIE_NOT_FOUND));
 
-        return movieMapper.toMovieResponse(movie);
+        MovieResponse response = movieMapper.toMovieResponse(movie);
+
+        if (movie.getActors() != null) {
+            response.setActors(movie.getActors());
+        }
+
+        return response;
     }
     public List<MovieResponse> getRecommendedMovies(Long movieId){
         Movie movie = movieRepository.findById(movieId)

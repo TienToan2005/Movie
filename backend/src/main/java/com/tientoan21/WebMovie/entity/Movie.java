@@ -1,5 +1,6 @@
 package com.tientoan21.WebMovie.entity;
 
+import com.tientoan21.WebMovie.dto.response.ActorResponse;
 import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.MovieStatus;
 import com.tientoan21.WebMovie.enums.MovieType;
@@ -8,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +18,7 @@ import java.util.Set;
 @Table(name = "movies")
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE movies SET deleted_at = NOW() WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -70,8 +72,12 @@ public class   Movie extends BaseEntity{
         )
     private Set<Category> categories = new HashSet<>();
 
-    @Column(length = 255)
-    private String actor;
+    @ElementCollection
+    @CollectionTable(
+            name = "movie_cast_list",
+            joinColumns = @JoinColumn(name = "movie_id")
+    )
+    private List<ActorResponse> actors = new ArrayList<>();
 
     @Column(name = "poster_url", length = 500)
     private String posterUrl;

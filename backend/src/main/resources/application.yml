@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -15,7 +15,7 @@ spring:
         default_batch_fetch_size: 20
 
   flyway:
-    enabled: true
+    enabled: false
 
   servlet:
     multipart:
@@ -27,12 +27,21 @@ cloudinary:
   api-key: ${CLOUDINARY_KEY}
   api-secret: ${CLOUDINARY_SECRET}
 
+tmdb:
+  api-key: ${TMDB_KEY}
+  base-url: https://api.themoviedb.org/3
+  image-base-url: https://image.tmdb.org/t/p/original
+
 jwt:
   signerKey: ${JWT_SECRET}
   expiration: ${EXPIRATION_KEY}
 
 logging:
   level:
+    root: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.tientoan21.WebMovie: DEBUG
     org:
       springframework:
         security: DEBUG    # Xem chi tiết quá trình lọc (Filter) và chặn (Deny)

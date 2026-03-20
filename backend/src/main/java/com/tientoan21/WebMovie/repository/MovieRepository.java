@@ -47,4 +47,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
        group by c.name
        """)
     List<DashboardResponse.CategoryStats> getCategoryStats();
+
+    @Query("SELECT m FROM Movie m LEFT JOIN FETCH m.actors WHERE m.id = :id")
+    Optional<Movie> findByIdWithActors(@Param("id") Long id);
 }

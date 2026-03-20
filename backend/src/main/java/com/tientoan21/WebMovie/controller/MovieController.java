@@ -31,15 +31,10 @@ public class MovieController {
         this.cloudinaryService = cloudinaryService;
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<MovieResponse> createMovie(
-            @Valid @RequestPart("data") MovieRequest request,
-            @RequestPart("poster")MultipartFile posterFile){
-
-            String posterUrl = cloudinaryService.uploadFile(posterFile, "poster");
-
-            MovieResponse movie = movieService.create(request, posterUrl);
+    public ApiResponse<MovieResponse> createMovie(@RequestBody @Valid MovieRequest request){
+            MovieResponse movie = movieService.create(request);
 
             return ApiResponse.<MovieResponse>builder()
                     .data(movie)
@@ -64,6 +59,7 @@ public class MovieController {
                 .data(movie)
                 .build();
     }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<MovieResponse> updateMovieById(@PathVariable Long id , @RequestBody MovieRequest request){

@@ -107,8 +107,9 @@ public class ReviewService {
         Double avgRating = reviewRepository.calculateAvgRating(movie.getId());
         Integer total = reviewRepository.countByMovieId(movie.getId());
 
-        movie.setAverageRating(avgRating);
-        movie.setTotalReviews(total);
+        movie.setAverageRating(avgRating != null ? avgRating : 0.0);
+        movie.setTotalReviews(total != null ? total : 0);
+
         movieRepository.save(movie);
     }
 }
