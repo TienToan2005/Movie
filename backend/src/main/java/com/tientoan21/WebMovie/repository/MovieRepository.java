@@ -3,6 +3,7 @@ package com.tientoan21.WebMovie.repository;
 import com.tientoan21.WebMovie.dto.response.DashboardResponse;
 import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.entity.Movie;
+import com.tientoan21.WebMovie.enums.MovieType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,8 +28,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
 
     List<Movie> findTop10ByOrderByAverageRatingDesc();
 
-    @Query("SELECT m from Movie m join m.favoriteUsers u where u.email = :email")
-    Page<Movie> findAllByFavoriteUsersEmail(@Param("email") String email, Pageable pageable);
+    @Query("SELECT m from Movie m join m.favoriteUsers u where u.username = :username")
+    Page<Movie> findAllByFavoriteUsersEmail(@Param("username") String username, Pageable pageable);
 
     @Query("select distinct m from  Movie m " +
             "join m.categories c " +
@@ -50,4 +51,6 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
 
     @Query("SELECT m FROM Movie m LEFT JOIN FETCH m.actors WHERE m.id = :id")
     Optional<Movie> findByIdWithActors(@Param("id") Long id);
+
+    boolean existsByTmdbIdAndType(Integer tmdbId, MovieType type);
 }

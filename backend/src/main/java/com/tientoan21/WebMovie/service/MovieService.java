@@ -3,18 +3,21 @@ package com.tientoan21.WebMovie.service;
 
 import com.tientoan21.WebMovie.dto.request.MovieFilter;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
-import com.tientoan21.WebMovie.dto.response.ActorResponse;
-import com.tientoan21.WebMovie.dto.response.MovieMetadataResponse;
-import com.tientoan21.WebMovie.dto.response.MovieResponse;
-import com.tientoan21.WebMovie.dto.response.PageResponse;
+import com.tientoan21.WebMovie.dto.response.*;
 import com.tientoan21.WebMovie.entity.Category;
+import com.tientoan21.WebMovie.entity.Episode;
 import com.tientoan21.WebMovie.entity.Movie;
 import com.tientoan21.WebMovie.entity.MovieSpecification;
+import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.ErrorCode;
+import com.tientoan21.WebMovie.enums.MovieStatus;
+import com.tientoan21.WebMovie.enums.MovieType;
 import com.tientoan21.WebMovie.exception.AppException;
 import com.tientoan21.WebMovie.mapper.MovieMapper;
 import com.tientoan21.WebMovie.repository.CategoryRepository;
+import com.tientoan21.WebMovie.repository.EpisodeRepository;
 import com.tientoan21.WebMovie.repository.MovieRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,60 +32,47 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final CategoryRepository categoryRepository;
     private final TmdbService tmdbService;
-    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, CategoryRepository categoryRepository, TmdbService tmdbService) {
-        this.movieRepository = movieRepository;
-        this.movieMapper = movieMapper;
-        this.categoryRepository = categoryRepository;
-        this.tmdbService = tmdbService;
-    }
-
+    private final EpisodeRepository episodeRepository;
     @Transactional
     public MovieResponse create(MovieRequest request) {
-        String title = request.title().trim();
-        if (movieRepository.existsByTitleAndDeletedAtIsNull(title)) {
+        if (movieRepository.existsByTitleAndDeletedAtIsNull(request.title().trim())) {
             throw new AppException(ErrorCode.MOVIE_EXISTED);
         }
 
         Movie movie = movieMapper.toMovieEntity(request);
 
+        if (movie.getTmdbId() != null) {
+            MovieMetadataResponse fullData = tmdbService.getMetadata(movie.getTmdbId(), String.valueOf(movie.getType()));
+            if (fullData != null) {
+                if (movie.getPosterUrl() == null) movie.setPosterUrl(fullData.getPosterUrl());
+                if (movie.getYear() == null) movie.setYear(fullData.getYear());
+                if (movie.getDirector() == null) movie.setDirector(fullData.getDirector());
+                if (movie.getActors() == null || movie.getActors().isEmpty()) {
+                    movie.setActors(fullData.getActors());
+                }
+                if (movie.getType() == null) {
+                    movie.setType("tv".equals(fullData.getType()) ? MovieType.SERIES : MovieType.MOVIE);
+                }
+            }
+        }
+
         if (request.categoryIds() != null && !request.categoryIds().isEmpty()) {
             List<Category> categories = categoryRepository.findAllById(request.categoryIds());
-            if (categories.size() != request.categoryIds().size()) {
-                throw new AppException(ErrorCode.CATEGORY_NOT_FOUND);
-            }
             movie.setCategories(new HashSet<>(categories));
         }
 
-        MovieMetadataResponse fullData = tmdbService.getMetadata(title);
-
-        if (fullData != null) {
-            if (movie.getPosterUrl() == null) movie.setPosterUrl(fullData.posterUrl());
-            if (movie.getTrailerUrl() == null) movie.setTrailerUrl(fullData.trailerUrl());
-            if (movie.getDescription() == null) movie.setDescription(fullData.overview());
-            if (movie.getYear() == null) movie.setYear(fullData.year());
-            if (movie.getCountry() == null || "N/A".equals(movie.getCountry())) movie.setCountry(fullData.country());
-            if (movie.getAverageRating() == null || movie.getAverageRating() == 0.0) movie.setAverageRating(fullData.voteAverage());
-            if (movie.getDirector() == null) movie.setDirector(fullData.director());
-
-            if (fullData.actors() != null && !fullData.actors().isEmpty()) {
-                List<ActorResponse> actorRecords = fullData.actors().stream()
-                        .map(a -> new ActorResponse(a.getName(), a.getProfileUrl()))
-                        .collect(Collectors.toList());
-                movie.setActors(actorRecords);
-            }
-        }
+        if (movie.getStatus() == null) movie.setStatus(MovieStatus.AVAILABLE);
+        if (movie.getConditionStatus() == null) movie.setConditionStatus(ConditionStatus.COMPLETED);
 
         Movie saved = movieRepository.save(movie);
 
         MovieResponse response = movieMapper.toMovieResponse(saved);
-        response.setActors(saved.getActors().stream()
-                .map(a -> new ActorResponse(a.getName(), a.getProfileUrl()))
-                .collect(Collectors.toList()));
 
         return response;
     }
@@ -117,8 +107,16 @@ public class MovieService {
 
         MovieResponse response = movieMapper.toMovieResponse(movie);
 
-        if (movie.getActors() != null) {
-            response.setActors(movie.getActors());
+        if (movie.getEpisodes() != null) {
+            List<EpisodeResponse> episodeResponses = movie.getEpisodes().stream()
+                    .map(ep -> EpisodeResponse.builder()
+                            .id(ep.getId())
+                            .episodeNumber(ep.getEpisodeNumber())
+                            .videoUrl(ep.getVideoUrl())
+                            .serverName(ep.getServerName())
+                            .build())
+                    .collect(Collectors.toList());
+            response.setEpisodes(episodeResponses);
         }
 
         return response;

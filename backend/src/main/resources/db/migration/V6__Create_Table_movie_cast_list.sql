@@ -1,4 +1,4 @@
-CREATE TABLE movie_actors (
+CREATE TABLE movie_cast_list (
                               movie_id BIGINT NOT NULL,
                               name VARCHAR(255),
                               profile_url VARCHAR(1000),

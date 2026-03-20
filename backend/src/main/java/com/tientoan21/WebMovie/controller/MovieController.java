@@ -24,11 +24,9 @@ import java.util.List;
 @RequestMapping("/api/movies")
 public class MovieController {
     private final MovieService movieService;
-    private final CloudinaryService cloudinaryService;
 
-    public MovieController(MovieService movieService, CloudinaryService cloudinaryService) {
+    public MovieController(MovieService movieService) {
         this.movieService = movieService;
-        this.cloudinaryService = cloudinaryService;
     }
 
     @PostMapping()

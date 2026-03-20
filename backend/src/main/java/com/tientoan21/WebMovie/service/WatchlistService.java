@@ -33,9 +33,9 @@ public class WatchlistService {
     }
 
     public Page<MovieResponse> getMyWatchlist(Pageable pageable){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        return movieRepository.findAllByFavoriteUsersEmail(email,pageable)
+        return movieRepository.findAllByFavoriteUsersEmail(username,pageable)
                 .map(movieMapper::toMovieResponse);
     }
 
@@ -47,8 +47,8 @@ public class WatchlistService {
     }
 
     private User getCurrentUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(email)
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 }

@@ -20,8 +20,8 @@ public enum ErrorCode {
     USER_ALREADY_REVIEWED(1012,HttpStatus.BAD_REQUEST,"Users have reviewed the movie."),
     REVIEW_NOT_FOUND(1013,HttpStatus.NOT_FOUND,"Review not found"),
     UNAUTHORIZED_ACTION(1014,HttpStatus.UNAUTHORIZED,"You do not have action"),
-    EMAIL_EXISTED(1015,HttpStatus.CONFLICT,"Email already exists")
-    ;
+    EMAIL_EXISTED(1015,HttpStatus.CONFLICT,"Email already exists"),
+    MOVIE_ALREADY_EXISTS(1016,HttpStatus.BAD_REQUEST ,"This movie already exists in Database." );
 
     private final int code;
     private final HttpStatus httpStatus;

@@ -93,4 +93,11 @@ public class   Movie extends BaseEntity{
 
     @ManyToMany(mappedBy = "favoriteMovies")
     private Set<User> favoriteUsers = new HashSet<>();
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OrderBy("episodeNumber ASC")
+    private List<Episode> episodes = new ArrayList<>();
+
+    @Column(name = "tmdb_id", unique = true)
+    private Integer tmdbId;
 }
