@@ -1,0 +1,67 @@
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IntelliJ IDEA
+# =========================
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# Logs
+# =========================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Env files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Node (React frontend)
+# =========================
+node_modules/
+dist/
+build/
+.cache/
+.next/
+out/
+
+# =========================
+# Java / Spring Boot (backend)
+# =========================
+target/
+*.jar
+*.war
+*.ear
+
+# Maven / Gradle
+.mvn/
+.gradle/
+
+# =========================
+# Temporary files
+# =========================
+tmp/
+temp/
+
+# =========================
+# Coverage / test
+# =========================
+coverage/
