@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://192.168.100.1:8080/api',
+    // baseURL: 'https://giant-masks-lose.loca.lt/api',
+    baseURL: 'http://192.168.1.93:8080/api',
 });
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
