@@ -5,17 +5,14 @@ import com.tientoan21.WebMovie.dto.response.ApiResponse;
 import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
 import com.tientoan21.WebMovie.dto.response.PageResponse;
-import com.tientoan21.WebMovie.service.CloudinaryService;
 import com.tientoan21.WebMovie.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -78,6 +75,20 @@ public class MovieController {
     public ApiResponse<List<MovieResponse>> getRecommendedMovies(@PathVariable Long id){
         return ApiResponse.<List<MovieResponse>>builder()
                 .data(movieService.getRecommendedMovies(id))
+                .build();
+    }
+
+    @GetMapping("/latest-slider")
+    public ApiResponse<List<MovieResponse>> getLatestForSlider() {
+        return ApiResponse.<List<MovieResponse>>builder()
+                .data(movieService.getLatestSliderMovies())
+                .build();
+    }
+
+    @GetMapping("/{id}/related")
+    public ApiResponse<List<MovieResponse>> getRelated(@PathVariable Long id, @RequestParam String category) {
+        return ApiResponse.<List<MovieResponse>>builder()
+                .data(movieService.getRelatedMovies(category,id))
                 .build();
     }
 }

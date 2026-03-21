@@ -18,6 +18,7 @@ import com.tientoan21.WebMovie.repository.CategoryRepository;
 import com.tientoan21.WebMovie.repository.EpisodeRepository;
 import com.tientoan21.WebMovie.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -78,25 +79,42 @@ public class MovieService {
     }
 
     public PageResponse<MovieResponse> getAllMovies(MovieFilter filter, Pageable pageable) {
+        MovieStatus targetStatus = (filter.status() != null) ? filter.status() : MovieStatus.AVAILABLE;
 
-        Specification<Movie> spec = Specification
-                .where(MovieSpecification.hasTitle(filter.title()))
-                .and(MovieSpecification.hasStatus(filter.status()))
-                .and(MovieSpecification.hasType(filter.type()))
-                .and(MovieSpecification.hasCountry(filter.country()))
-                .and(MovieSpecification.hasYear(filter.year()))
-                .and(MovieSpecification.hasCategory(filter.categoryId()));
+        Specification<Movie> spec = Specification.where(MovieSpecification.hasStatus(targetStatus));
 
-        Page<Movie> moviePage = movieRepository.findAll(spec, pageable);
+        if (filter.title() != null && !filter.title().isBlank()) {
+            spec = spec.and(MovieSpecification.hasTitle(filter.title()));
+        }
+        if (filter.type() != null) {
+            spec = spec.and(MovieSpecification.hasType(filter.type()));
+        }
+        if (filter.country() != null && !filter.country().isBlank()) {
+            spec = spec.and(MovieSpecification.hasCountry(filter.country()));
+        }
+        if (filter.year() != null) {
+            spec = spec.and(MovieSpecification.hasYear(filter.year()));
+        }
+        if (filter.categoryId() != null) {
+            spec = spec.and(MovieSpecification.hasCategory(filter.categoryId()));
+        }
+
+        spec = spec.and(MovieSpecification.fetchCategories());
+
+        Pageable sortedByRating = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("averageRating").descending()
+        );
+
+        Page<Movie> moviePage = movieRepository.findAll(spec, sortedByRating);
 
         return PageResponse.<MovieResponse>builder()
                 .page(moviePage.getNumber())
                 .size(moviePage.getSize())
                 .totalPages(moviePage.getTotalPages())
                 .totalItems(moviePage.getTotalElements())
-                .items(moviePage
-                        .map(movieMapper::toMovieResponse)
-                        .getContent())
+                .items(moviePage.map(this::convertToDTO).getContent())
                 .build();
     }
 
@@ -156,5 +174,45 @@ public class MovieService {
 
         movie.setDeletedAt(LocalDateTime.now());
         movieRepository.save(movie);
+    }
+
+    public MovieResponse convertToDTO(Movie movie) {
+        MovieResponse dto = movieMapper.toMovieResponse(movie);
+
+        if ("SERIES".equalsIgnoreCase(String.valueOf(movie.getType()))) {
+            if (movie.getEpisodes() != null && !movie.getEpisodes().isEmpty()) {
+                int maxEp = movie.getEpisodes().stream()
+                        .mapToInt(Episode::getEpisodeNumber)
+                        .max().orElse(0);
+                dto.setCurrentEpisode(maxEp > 0 ? "Tập " + maxEp : "Sắp ra mắt");
+            } else {
+                dto.setCurrentEpisode("Sắp ra mắt");
+            }
+        } else {
+            dto.setCurrentEpisode("Full");
+        }
+
+        dto.setQuality(movie.getQuality() != null ? movie.getQuality() : "HD");
+        dto.setSubType(movie.getSubType() != null ? movie.getSubType() : "Vietsub");
+
+        return dto;
+    }
+    // phim lien quan
+    public List<MovieResponse> getRelatedMovies(String category, Long movieId) {
+        Pageable topFive = PageRequest.of(0, 5);
+        List<Movie> movies = movieRepository.findRelatedMovies(category, movieId, topFive);
+
+        return movies.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+    // Top 15 phim moi nhat
+    public List<MovieResponse> getLatestSliderMovies() {
+        Pageable topFifteen = PageRequest.of(0, 15);
+        List<Movie> movies = movieRepository.findTop15ByOrderByUpdatedAtDesc(topFifteen);
+
+        return movies.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 }

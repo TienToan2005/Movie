@@ -12,7 +12,7 @@ public class MovieSpecification {
     public static Specification<Movie> hasTitle(String title){
         return ((root, query, criteriaBuilder)
                 -> title == null ?
-                null : criteriaBuilder.like(root.get("title"), "%" + title.toLowerCase() + "%")
+                null : criteriaBuilder.like(criteriaBuilder.lower(root.get("title")), "%" + title.toLowerCase() + "%")
                 );
     }
     public static Specification<Movie> hasStatus(MovieStatus status) {

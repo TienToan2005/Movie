@@ -7,6 +7,7 @@ import com.tientoan21.WebMovie.enums.MovieType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -20,13 +21,11 @@ import java.util.Set;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecificationExecutor<Movie> {
 
-
+    @EntityGraph(attributePaths = {"episodes", "categories"})
     Page<Movie> findAll(Specification<Movie> spec, Pageable pageable);
 
     Optional<Movie> findByIdAndDeletedAtIsNull(Long id);
     boolean existsByTitleAndDeletedAtIsNull(String title);
-
-    List<Movie> findTop10ByOrderByAverageRatingDesc();
 
     @Query("SELECT m from Movie m join m.favoriteUsers u where u.username = :username")
     Page<Movie> findAllByFavoriteUsersEmail(@Param("username") String username, Pageable pageable);
@@ -53,4 +52,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
     Optional<Movie> findByIdWithActors(@Param("id") Long id);
 
     boolean existsByTmdbIdAndType(Integer tmdbId, MovieType type);
+
+    @Query("SELECT m FROM Movie m WHERE m.status = 'AVAILABLE' ORDER BY m.updatedAt DESC")
+    List<Movie> findTop15ByOrderByUpdatedAtDesc(Pageable pageable);
+
+    @Query("SELECT m FROM Movie m JOIN m.categories c WHERE c.name = :catName AND m.id != :id AND m.status = 'AVAILABLE'")
+    List<Movie> findRelatedMovies(@Param("catName") String catName, @Param("id") Long id, Pageable pageable);
+
 }

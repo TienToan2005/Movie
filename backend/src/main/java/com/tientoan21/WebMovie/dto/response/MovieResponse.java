@@ -38,4 +38,8 @@ public class MovieResponse {
 
     private List<EpisodeResponse> episodes;
 
+    private String currentEpisode;
+    private String quality;
+    private String subType;
+
 }

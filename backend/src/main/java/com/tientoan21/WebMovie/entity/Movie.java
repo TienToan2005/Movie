@@ -100,4 +100,8 @@ public class   Movie extends BaseEntity{
 
     @Column(name = "tmdb_id", unique = true)
     private Integer tmdbId;
+
+    private String currentEpisode;
+    private String quality;
+    private String subType;
 }

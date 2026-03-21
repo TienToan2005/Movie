@@ -97,7 +97,8 @@ public class SecurityConfig {
         // Cho phép frontend
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:3000",
-                "http://192.168.100.1:3000"
+                "http://192.168.1.93:3000",
+                "https://blooded-horrifyingly-raina.ngrok-free.dev"
         ));
 
         // Cho phép các phương thức phổ biến
