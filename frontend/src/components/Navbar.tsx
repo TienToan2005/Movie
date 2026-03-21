@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSettings } from '@/context/SettingsContext';
 
 export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
+  
+  const { settings } = useSettings();
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username'); 
@@ -37,8 +40,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-2xl font-extrabold text-red-600 tracking-tighter hover:scale-105 transition-all">
-              TOANMOVIE
+            <Link href="/" 
+                  style={{ color: settings.primaryColor }}
+                  className="text-2xl font-extrabold tracking-tighter hover:scale-105 transition-all">
+              {settings.siteName}
             </Link>
             
             <div className="hidden md:flex items-center space-x-6">
@@ -55,7 +60,8 @@ export default function Navbar() {
                 placeholder="Tìm phim..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="bg-gray-900 text-white text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-600 w-48 lg:w-64 transition-all border border-gray-700"
+                style={{ '--tw-ring-color': settings.primaryColor } as any}
+                className="bg-gray-900 text-white text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 w-48 lg:w-64 transition-all border border-gray-700"
               />
               <button type="submit" className="absolute left-3 top-2.5 text-gray-400 hover:text-white">
                 🔍
@@ -69,13 +75,13 @@ export default function Navbar() {
                   className="flex items-center gap-2 group cursor-pointer border-r border-gray-800 pr-4"
                 >
                   <div className="flex flex-col items-end">
-                    <span className="text-gray-500 text-[9px] uppercase font-bold tracking-widest group-hover:text-red-500 transition-colors">Tài khoản</span>
-                    <span className="text-white text-sm font-bold group-hover:text-red-500 transition-colors">
+                    <span className="text-gray-500 text-[9px] uppercase font-bold tracking-widest group-hover:opacity-80 transition-colors">Tài khoản</span>
+                    <span className="text-white text-sm font-bold">
                       {username}
                     </span>
                   </div>
-                  {/* Icon Avatar tròn nhỏ */}
-                  <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-xs font-bold shadow-lg shadow-red-900/40">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shadow-lg"
+                       style={{ backgroundColor: settings.primaryColor }}>
                     {username[0].toUpperCase()}
                   </div>
                 </Link>
@@ -90,7 +96,8 @@ export default function Navbar() {
             ) : (
               <Link 
                 href="/login" 
-                className="bg-red-600 text-white px-5 py-2 rounded-md text-sm font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-900/20"
+                style={{ backgroundColor: settings.primaryColor }}
+                className="text-white px-5 py-2 rounded-md text-sm font-bold hover:opacity-90 transition-all shadow-lg shadow-red-900/20"
               >
                 ĐĂNG NHẬP
               </Link>

@@ -13,20 +13,25 @@ interface Movie {
   averageRating: number;
   year: number;
   status: string;
+  tmdbId?: number;
+  type?: string;
 }
 
 function MovieList() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  const [page, setPage] = useState(0); 
+  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [role, setRole] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
   const titleQuery = searchParams.get('title');
   const type = searchParams.get('type');
 
+  // Kiểm tra quyền Admin từ localStorage
   useEffect(() => {
+    const userRole = localStorage.getItem('role');
+    setRole(userRole);
     setPage(0);
   }, [type, titleQuery]);
 
@@ -44,8 +49,9 @@ function MovieList() {
         });
 
         const responseData = res.data?.data || res.data;
-        const allMovies: any[] = responseData.content || responseData.items || []; 
-
+        const allMovies: any[] = responseData.content || responseData.items || [];
+        
+        // Lọc phim có trạng thái AVAILABLE
         const availableMovies = allMovies.filter((movie: any) => movie.status === 'AVAILABLE');
 
         setMovies(availableMovies);
@@ -61,6 +67,21 @@ function MovieList() {
 
     fetchMovies();
   }, [type, titleQuery, page]);
+
+  const isAdmin = role === 'ADMIN' || role === 'ROLE_ADMIN';
+
+  const handleSyncMovie = async (e: React.MouseEvent, tmdbId: number, movieType: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      const loadingToast = toast.loading("Đang đồng bộ dữ liệu...");
+      await api.post(`/admin/dashboard/movies/sync/${movieType || 'movie'}/${tmdbId}`);
+      toast.dismiss(loadingToast);
+      toast.success("Đồng bộ TMDB thành công! 🔄");
+    } catch (err) {
+      toast.error("Lỗi đồng bộ dữ liệu!");
+    }
+  };
 
   const handleAddToWatchlist = async (e: React.MouseEvent, movieId: number) => {
     e.preventDefault();
@@ -88,7 +109,7 @@ function MovieList() {
     return (
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 animate-pulse">
         {[...Array(10)].map((_, i) => (
-          <div key={i} className="aspect-[2/3] bg-gray-800 rounded-xl"></div>
+          <div key={i} className="aspect-[2/3] bg-zinc-900 rounded-xl"></div>
         ))}
       </div>
     );
@@ -96,13 +117,26 @@ function MovieList() {
 
   return (
     <>
-      <h1 className="text-3xl font-bold mb-10 text-red-600 tracking-wider border-l-4 border-red-600 pl-4 uppercase">
-        {getPageTitle()}
-      </h1>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+        <h1 className="text-3xl font-bold text-red-600 tracking-wider border-l-4 border-red-600 pl-4 uppercase">
+          {getPageTitle()}
+        </h1>
+
+        {/* NÚT DASHBOARD CHO ADMIN */}
+        {isAdmin && (
+          <Link 
+            href="/admin/dashboard" 
+            className="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-2 rounded-full font-black flex items-center gap-2 transition-all shadow-[0_0_15px_rgba(234,179,8,0.4)]"
+          >
+            ⚙️ QUẢN TRỊ HỆ THỐNG
+          </Link>
+        )}
+      </div>
       
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
         {movies.length > 0 ? movies.map((movie) => (
           <div key={movie.id} className="relative group">
+            {/* Nút yêu thích cho mọi User */}
             <button 
               onClick={(e) => handleAddToWatchlist(e, movie.id)}
               className="absolute top-3 right-3 z-20 bg-black/70 hover:bg-red-600 text-white p-2.5 rounded-full transition-all opacity-0 group-hover:opacity-100 shadow-xl"
@@ -110,8 +144,18 @@ function MovieList() {
               ❤️
             </button>
 
+            {/* Nút Sync nhanh chỉ dành cho ADMIN */}
+            {isAdmin && movie.tmdbId && (
+              <button 
+                onClick={(e) => handleSyncMovie(e, movie.tmdbId!, movie.type || 'movie')}
+                className="absolute top-3 left-3 z-20 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all opacity-0 group-hover:opacity-100 shadow-xl"
+              >
+                🔄 SYNC
+              </button>
+            )}
+
             <Link href={`/movies/${movie.id}`}>
-              <div className="cursor-pointer bg-gray-900 rounded-xl overflow-hidden hover:scale-105 transition-all border border-gray-800 hover:border-red-600 shadow-2xl">
+              <div className="cursor-pointer bg-zinc-900 rounded-xl overflow-hidden hover:scale-105 transition-all border border-zinc-800 hover:border-red-600 shadow-2xl">
                 <div className="relative aspect-[2/3]">
                   <img 
                     src={movie.posterUrl || 'https://via.placeholder.com/300x450'} 
@@ -126,21 +170,21 @@ function MovieList() {
                   <h3 className="font-bold truncate text-sm md:text-base">{movie.title}</h3>
                   <div className="flex justify-between items-center mt-3 text-xs">
                     <p className="text-yellow-400 font-bold">⭐ {movie.averageRating?.toFixed(1) || '0.0'}</p>
-                    <span className="text-gray-500">{movie.year}</span>
+                    <span className="text-zinc-500">{movie.year}</span>
                   </div>
                 </div>
               </div>
             </Link>
           </div>
         )) : (
-          <div className="col-span-full text-center py-20 bg-gray-900/50 rounded-3xl border border-dashed border-gray-800">
-            <p className="text-gray-400 text-xl mb-4">Không tìm thấy phim nào cả 😢</p>
+          <div className="col-span-full text-center py-20 bg-zinc-900/50 rounded-3xl border border-dashed border-zinc-800">
+            <p className="text-zinc-400 text-xl mb-4">Không tìm thấy phim nào cả 😢</p>
             <Link href="/" className="text-red-600 underline">Quay lại xem tất cả phim</Link>
           </div>
         )}
       </div>
 
-      {/* --- ĐIỀU HƯỚNG PHÂN TRANG --- */}
+      {/* --- PHÂN TRANG --- */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-6 mt-16 mb-10">
           <button
@@ -171,7 +215,7 @@ function MovieList() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-black text-white p-8">
-      <Suspense fallback={<div className="text-white">Đang tải phim...</div>}>
+      <Suspense fallback={<div className="text-white text-center py-20">Đang tải danh sách phim...</div>}>
         <MovieList />
       </Suspense>
     </main>

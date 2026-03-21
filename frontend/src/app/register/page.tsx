@@ -5,51 +5,91 @@ import { useRouter } from 'next/navigation';
 import api from '@/services/api';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { useSettings } from '@/context/SettingsContext'; // Import context
 
 export default function Register() {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { settings } = useSettings(); // Lấy settings từ kho chung
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await api.post('/auth/register', formData);
-      toast.success("Đăng ký thành công! Đăng nhập thôi.!");
+      toast.success("Đăng ký thành công! Đăng nhập thôi!");
       router.push('/login');
     } catch (err: any) {
-        if (err.response?.status === 409) {
+      if (err.response?.status === 409) {
         toast.error('Email này có người dùng rồi, hãy thử cái khác!');
-        } else {
+      } else {
         toast.error('Lỗi gì đó rồi, check lại nhé!');
-        }
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-2xl">
-        <h2 className="text-3xl font-bold text-red-600 mb-6 text-center">ĐĂNG KÝ</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="max-w-md w-full bg-zinc-900 p-8 rounded-2xl border border-zinc-800 shadow-2xl">
+        
+        <h2 
+          style={{ color: settings.primaryColor }} 
+          className="text-3xl font-black mb-2 text-center tracking-tighter uppercase italic"
+        >
+          ĐĂNG KÝ
+        </h2>
+        <p className="text-zinc-500 text-center text-xs font-bold mb-8 uppercase tracking-widest">Tạo tài khoản mới</p>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
           <input 
-            type="text" placeholder="Tên đăng nhập" 
-            className="w-full bg-black border border-gray-700 rounded p-3 outline-none focus:border-red-600"
+            required
+            type="text" 
+            placeholder="Tên đăng nhập" 
+            className="w-full bg-black border border-zinc-800 rounded-xl p-4 outline-none transition-all focus:border-zinc-600"
+            style={{ caretColor: settings.primaryColor }}
             onChange={e => setFormData({...formData, username: e.target.value})}
           />
           <input 
-            type="email" placeholder="Email" 
-            className="w-full bg-black border border-gray-700 rounded p-3 outline-none focus:border-red-600"
+            required
+            type="email" 
+            placeholder="Email" 
+            className="w-full bg-black border border-zinc-800 rounded-xl p-4 outline-none transition-all focus:border-zinc-600"
+            style={{ caretColor: settings.primaryColor }}
             onChange={e => setFormData({...formData, email: e.target.value})}
           />
           <input 
-            type="password" placeholder="Mật khẩu" 
-            className="w-full bg-black border border-gray-700 rounded p-3 outline-none focus:border-red-600"
+            required
+            type="password" 
+            placeholder="Mật khẩu" 
+            className="w-full bg-black border border-zinc-800 rounded-xl p-4 outline-none transition-all focus:border-zinc-600"
+            style={{ caretColor: settings.primaryColor }}
             onChange={e => setFormData({...formData, password: e.target.value})}
           />
-          <button type="submit" className="w-full bg-red-600 hover:bg-red-700 py-3 rounded font-bold transition-all">
-            TẠO TÀI KHOẢN
+          
+          <button 
+            type="submit" 
+            disabled={loading}
+            style={{ backgroundColor: settings.primaryColor }}
+            className={`w-full py-4 rounded-xl font-black text-black transition-all mt-4 hover:opacity-90 active:scale-95 ${loading ? 'opacity-50' : ''}`}
+          >
+            {loading ? 'ĐANG XỬ LÝ...' : 'TẠO TÀI KHOẢN'}
           </button>
         </form>
-        <p className="mt-4 text-center text-gray-400">Đã có nick? <Link href="/login" className="text-red-500 underline">Đăng nhập ngay</Link></p>
+
+        <div className="mt-8 pt-8 border-t border-zinc-800 text-center">
+          <p className="text-zinc-500 text-sm">
+            Đã có nick? 
+            <Link href="/login" style={{ color: settings.primaryColor }} className="ml-2 font-bold hover:underline">
+               Đăng nhập ngay
+            </Link>
+          </p>
+          <Link href="/" className="inline-block mt-6 text-xs text-zinc-600 hover:text-white transition-colors">
+            ← Quay lại trang chủ
+          </Link>
+        </div>
       </div>
     </div>
   );
