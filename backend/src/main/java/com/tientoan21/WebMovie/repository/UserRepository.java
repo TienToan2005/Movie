@@ -25,10 +25,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
 
     @Query("""
-       select MONTH(u.createdAt) as month,
-              count(u) as count
-       from User u
-       group by MONTH(u.createdAt)
+       select month(u.createdAt) as month, 
+              count(u) as count 
+       from User u 
+       group by month(u.createdAt)
        """)
     List<DashboardResponse.MonthlyUserGrowth> getUserGrowth();
 }

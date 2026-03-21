@@ -48,6 +48,7 @@ public class AuthService {
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .authenticated(true)
+                .role(user.getRoleUser().name())
                 .build();
     }
 

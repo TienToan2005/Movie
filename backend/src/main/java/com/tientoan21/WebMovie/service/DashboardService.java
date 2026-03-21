@@ -1,5 +1,6 @@
 package com.tientoan21.WebMovie.service;
 
+import com.tientoan21.WebMovie.dto.request.MovieRequest;
 import com.tientoan21.WebMovie.dto.response.DashboardResponse;
 import com.tientoan21.WebMovie.dto.response.EpisodeResponse;
 import com.tientoan21.WebMovie.dto.response.MovieMetadataResponse;
@@ -7,6 +8,7 @@ import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.entity.Category;
 import com.tientoan21.WebMovie.entity.Episode;
 import com.tientoan21.WebMovie.entity.Movie;
+import com.tientoan21.WebMovie.entity.Setting;
 import com.tientoan21.WebMovie.enums.ConditionStatus;
 import com.tientoan21.WebMovie.enums.ErrorCode;
 import com.tientoan21.WebMovie.enums.MovieStatus;
@@ -19,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,14 +38,25 @@ public class DashboardService {
     private final ReviewRepository reviewRepository;
     private final EpisodeRepository episodeRepository;
     private final TmdbService tmdbService;
+    private final SettingRepository settingRepository;
 
-    public DashboardResponse getStats(){
+    public DashboardResponse getStats() {
+        long totalUsers = userRepository.count();
+        long totalMovies = movieRepository.count();
+        long totalReviews = reviewRepository.count();
+
+        var categoryStats = movieRepository.getCategoryStats();
+        if (categoryStats == null) categoryStats = new ArrayList<>();
+
+        var userGrowth = userRepository.getUserGrowth();
+        if (userGrowth == null) userGrowth = new ArrayList<>();
+
         return DashboardResponse.builder()
-                .totalUsers(userRepository.count())
-                .totalMovies(movieRepository.count())
-                .totalReviews(reviewRepository.count())
-                .categoryStats(movieRepository.getCategoryStats())
-                .userGrowth(userRepository.getUserGrowth())
+                .totalUsers(totalUsers)
+                .totalMovies(totalMovies)
+                .totalReviews(totalReviews)
+                .categoryStats(categoryStats)
+                .userGrowth(userGrowth)
                 .build();
     }
     @Transactional
@@ -126,5 +141,19 @@ public class DashboardService {
 
         log.info("Successfully synced {} '{}' with {} episodes", data.getType(), data.getTitle(), isSeries ? data.getTotalEpisodes() : 1);
         return response;
+    }
+
+    public void updateConfig(String key, String value) {
+        Setting setting = settingRepository.findByConfigKey(key)
+                .orElse(new Setting(null, key, value));
+
+        setting.setConfigValue(value);
+        settingRepository.save(setting);
+    }
+
+    public String getConfig(String key) {
+        return settingRepository.findByConfigKey(key)
+                .map(Setting::getConfigValue)
+                .orElse("");
     }
 }

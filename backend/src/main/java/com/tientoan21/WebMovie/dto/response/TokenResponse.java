@@ -8,5 +8,6 @@ public record TokenResponse(
     String refreshToken,
     String username,
     String email,
-    boolean authenticated
+    boolean authenticated,
+    String role
 ){}

@@ -42,11 +42,11 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
                                           Pageable pageable);
 
     @Query("""
-       select c.name as name,
-              count(m) as count
-       from Movie m join m.categories c
+       select c.name as name, 
+              count(m) as count 
+       from Movie m join m.categories c 
        group by c.name
-       """)
+        """)
     List<DashboardResponse.CategoryStats> getCategoryStats();
 
     @Query("SELECT m FROM Movie m LEFT JOIN FETCH m.actors WHERE m.id = :id")

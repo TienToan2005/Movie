@@ -48,7 +48,13 @@ public class UserService {
 
     public List<UserResponse> getAllUser() {
         return userRepository.findAll().stream()
-                .map(userMapper::toUserResponse)
+                .map(user -> UserResponse.builder()
+                        .id(user.getId().toString())
+                        .email(user.getEmail())
+                        .username(user.getUsername())
+                        .role(user.getRoleUser().name())
+                        .createdAt(user.getCreatedAt().toString())
+                        .build())
                 .collect(Collectors.toList());
     }
 
@@ -81,5 +87,17 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         user.setIsActive(false);
+    }
+
+    public void changeRole(Long id, String role) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        if (!user.getIsActive()) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        user.setRoleUser(RoleUser.valueOf(role));
+        userRepository.save(user);
     }
 }
