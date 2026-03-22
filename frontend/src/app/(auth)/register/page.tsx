@@ -5,24 +5,24 @@ import { useRouter } from 'next/navigation';
 import api from '@/services/api';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { useSettings } from '@/context/SettingsContext'; // Import context
+import { useSettings } from '@/context/SettingsContext';
 
 export default function Register() {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { settings } = useSettings(); // Lấy settings từ kho chung
+  const { settings } = useSettings();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
       await api.post('/auth/register', formData);
-      toast.success("Đăng ký thành công! Đăng nhập thôi!");
-      router.push('/login');
+      toast.success("Đăng ký thành công! Hãy kiểm tra email để lấy mã xác thực.");
+      router.push(`/verify-account?email=${encodeURIComponent(formData.email)}`);
     } catch (err: any) {
       if (err.response?.status === 409) {
-        toast.error('Email này có người dùng rồi, hãy thử cái khác!');
+        toast.error('Email hoặc tên đăng nhập đã tồn tại!');
       } else {
         toast.error('Lỗi gì đó rồi, check lại nhé!');
       }
@@ -75,7 +75,7 @@ export default function Register() {
             style={{ backgroundColor: settings.primaryColor }}
             className={`w-full py-4 rounded-xl font-black text-black transition-all mt-4 hover:opacity-90 active:scale-95 ${loading ? 'opacity-50' : ''}`}
           >
-            {loading ? 'ĐANG XỬ LÝ...' : 'TẠO TÀI KHOẢN'}
+            {loading ? 'ĐANG XỬ LÝ...' : 'XÁC NHẬN ĐĂNG KÝ'}
           </button>
         </form>
 

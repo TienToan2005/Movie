@@ -11,7 +11,7 @@ export default function Login() {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { settings } = useSettings(); // Lấy settings từ Context
+  const { settings } = useSettings();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,6 +75,14 @@ export default function Login() {
               style={{ caretColor: settings.primaryColor }}
               onChange={e => setFormData({...formData, password: e.target.value})}
             />
+            <div className="flex justify-end mt-1">
+              <Link 
+                href="/forgot-password" 
+                className="text-zinc-500 text-[11px] font-bold uppercase hover:text-red-600 transition-colors tracking-tighter"
+              >
+                Quên mật khẩu?
+              </Link>
+            </div>
           </div>
 
           <button 
