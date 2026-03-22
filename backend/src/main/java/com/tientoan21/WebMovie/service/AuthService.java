@@ -9,28 +9,31 @@ import com.tientoan21.WebMovie.entity.RefreshToken;
 import com.tientoan21.WebMovie.entity.User;
 import com.tientoan21.WebMovie.enums.ErrorCode;
 import com.tientoan21.WebMovie.enums.RoleUser;
+import com.tientoan21.WebMovie.enums.UserStatus;
 import com.tientoan21.WebMovie.exception.AppException;
 import com.tientoan21.WebMovie.mapper.UserMapper;
 import com.tientoan21.WebMovie.repository.UserRepository;
 import com.tientoan21.WebMovie.security.JwtService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
     private final JwtService jwtService;
     private final UserMapper userMapper;
-
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, JwtService jwtService, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.refreshTokenService = refreshTokenService;
-        this.jwtService = jwtService;
-        this.userMapper = userMapper;
-    }
+    private final OtpService otpService;
+    private final EmailService emailService;
 
     public TokenResponse login(LoginRequest request) {
         var user = userRepository.findByUsername(request.username())
@@ -65,6 +68,7 @@ public class AuthService {
         user.setEmail(request.email());
         user.setPasswordHash(passwordEncoder.encode(request.password()));
         user.setRoleUser(RoleUser.CUSTOMER);
+        user.setStatus(UserStatus.PENDING);
         user.setIsActive(true);
 
         return userMapper.toUserResponse(userRepository.save(user));
@@ -86,4 +90,33 @@ public class AuthService {
                 .refreshToken(newToken.getToken())
                 .build();
     }
+    @Transactional
+    public void requestForgotPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại trên hệ thống!"));
+
+        String otp = String.format("%06d", new Random().nextInt(999999));
+
+        otpService.saveOtp(email, otp);
+
+        emailService.sendOtpToEmail(email, otp);
+
+    }
+    public boolean verifyOtp(String email, String otp) {
+        return otpService.validateOtp(email, otp);
+    }
+
+    @Transactional
+    public void resetPassword(String email, String otp, String newPassword){
+        if (!otpService.validateOtp(email, otp)) {
+            throw new RuntimeException("Mã OTP không chính xác hoặc đã hết hạn!");
+        }
+
+        User user = userRepository.findByEmail(email).get();
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        otpService.deleteOtp(email);
+    }
+
 }

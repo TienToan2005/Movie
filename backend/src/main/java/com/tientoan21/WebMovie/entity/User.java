@@ -1,6 +1,7 @@
 package com.tientoan21.WebMovie.entity;
 
 import com.tientoan21.WebMovie.enums.RoleUser;
+import com.tientoan21.WebMovie.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,4 +41,6 @@ public class User extends BaseEntity{
     )
     private Set<Movie> favoriteMovies = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private UserStatus status = UserStatus.PENDING;
 }

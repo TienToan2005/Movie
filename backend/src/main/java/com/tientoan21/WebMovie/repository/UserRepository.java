@@ -2,11 +2,13 @@ package com.tientoan21.WebMovie.repository;
 
 import com.tientoan21.WebMovie.dto.response.DashboardResponse;
 import com.tientoan21.WebMovie.entity.User;
+import com.tientoan21.WebMovie.enums.UserStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.lang.ScopedValue;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,4 +33,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
        group by month(u.createdAt)
        """)
     List<DashboardResponse.MonthlyUserGrowth> getUserGrowth();
+
+    int deleteByStatusAndCreatedAtBefore(UserStatus userStatus, LocalDateTime threshold);
 }
