@@ -27,6 +27,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -101,13 +102,10 @@ public class MovieService {
 
         spec = spec.and(MovieSpecification.fetchCategories());
 
-        Pageable sortedByRating = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by("averageRating").descending()
-        );
+        Sort sort = pageable.getSort().isSorted() ? pageable.getSort() : Sort.by("averageRating").descending();
+        Pageable finalPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 
-        Page<Movie> moviePage = movieRepository.findAll(spec, sortedByRating);
+        Page<Movie> moviePage = movieRepository.findAll(spec, finalPageable);
 
         return PageResponse.<MovieResponse>builder()
                 .page(moviePage.getNumber())
@@ -213,6 +211,25 @@ public class MovieService {
 
         return movies.stream()
                 .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<MovieResponse> suggest(String query){
+        if (query == null || query.trim().length() < 3) {
+            return Collections.emptyList();
+        }
+        Pageable pageable = PageRequest.of(0, 7);
+        List<Movie> movies = movieRepository.findTopSuggestions(query,pageable);
+
+        return movies.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+    public List<CategoryResponse> getCategories(){
+        List<Category> categories = movieRepository.findAllCategory();
+
+        return categories.stream()
+                .map(movieMapper::toCategoryResponse)
                 .collect(Collectors.toList());
     }
 }

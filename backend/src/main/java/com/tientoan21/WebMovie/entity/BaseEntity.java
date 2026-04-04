@@ -40,7 +40,4 @@ public abstract class BaseEntity {
     @Column(name = "deleted_by")
     private String deletedBy;
 
-    public boolean isDeleted() {
-        return deletedAt != null;
-    }
 }

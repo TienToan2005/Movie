@@ -39,6 +39,10 @@ public class AuthService {
         var user = userRepository.findByUsername(request.username())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
+        if (user.getStatus() == UserStatus.PENDING) {
+            throw new AppException(ErrorCode.USER_NOT_VERIFIED);
+        }
+
         boolean authen = passwordEncoder.matches(request.password(), user.getPasswordHash());
         if (!authen) {
             throw new AppException(ErrorCode.INVALID_CREDENTIALS);

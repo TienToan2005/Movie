@@ -21,8 +21,8 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND(1013,HttpStatus.NOT_FOUND,"Review not found"),
     UNAUTHORIZED_ACTION(1014,HttpStatus.UNAUTHORIZED,"You do not have action"),
     EMAIL_EXISTED(1015,HttpStatus.CONFLICT,"Email already exists"),
-    MOVIE_ALREADY_EXISTS(1016,HttpStatus.BAD_REQUEST ,"This movie already exists in Database." );
-
+    MOVIE_ALREADY_EXISTS(1016,HttpStatus.BAD_REQUEST ,"This movie already exists in Database." ),
+    USER_NOT_VERIFIED(1016,HttpStatus.UNAUTHORIZED,"The user has not verified their email");
     private final int code;
     private final HttpStatus httpStatus;
     private final String message;

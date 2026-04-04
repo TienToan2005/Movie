@@ -16,7 +16,7 @@ public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private static final long REFRESH_TOKEN_EXPIRY_DAYS = 30;
+    private static final long REFRESH_TOKEN_EXPIRY_DAYS = 10;
 
     public RefreshToken createRefreshToken(User user) {
 

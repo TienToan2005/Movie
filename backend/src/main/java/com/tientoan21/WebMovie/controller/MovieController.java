@@ -2,9 +2,11 @@ package com.tientoan21.WebMovie.controller;
 
 import com.tientoan21.WebMovie.dto.request.MovieFilter;
 import com.tientoan21.WebMovie.dto.response.ApiResponse;
+import com.tientoan21.WebMovie.dto.response.CategoryResponse;
 import com.tientoan21.WebMovie.dto.response.MovieResponse;
 import com.tientoan21.WebMovie.dto.request.MovieRequest;
 import com.tientoan21.WebMovie.dto.response.PageResponse;
+import com.tientoan21.WebMovie.entity.Movie;
 import com.tientoan21.WebMovie.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +91,18 @@ public class MovieController {
     public ApiResponse<List<MovieResponse>> getRelated(@PathVariable Long id, @RequestParam String category) {
         return ApiResponse.<List<MovieResponse>>builder()
                 .data(movieService.getRelatedMovies(category,id))
+                .build();
+    }
+    @GetMapping("/suggest")
+    public ApiResponse<List<MovieResponse>> suggestMovies(@RequestParam String query) {
+        return ApiResponse.<List<MovieResponse>>builder()
+                .data(movieService.suggest(query))
+                .build();
+    }
+    @GetMapping("/categories")
+    public ApiResponse<List<CategoryResponse>> getCategories(){
+        return ApiResponse.<List<CategoryResponse>>builder()
+                .data(movieService.getCategories())
                 .build();
     }
 }

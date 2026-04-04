@@ -1,7 +1,9 @@
 package com.tientoan21.WebMovie.repository;
 
+import com.tientoan21.WebMovie.dto.response.CategoryResponse;
 import com.tientoan21.WebMovie.dto.response.DashboardResponse;
 import com.tientoan21.WebMovie.dto.response.MovieResponse;
+import com.tientoan21.WebMovie.entity.Category;
 import com.tientoan21.WebMovie.entity.Movie;
 import com.tientoan21.WebMovie.enums.MovieType;
 import org.springframework.data.domain.Page;
@@ -59,4 +61,9 @@ public interface MovieRepository extends JpaRepository<Movie, Long> , JpaSpecifi
     @Query("SELECT m FROM Movie m JOIN m.categories c WHERE c.name = :catName AND m.id != :id AND m.status = 'AVAILABLE'")
     List<Movie> findRelatedMovies(@Param("catName") String catName, @Param("id") Long id, Pageable pageable);
 
+    @Query("select m from Movie m where lower(m.title) like lower(concat('%', :query, '%')) and m.status = 'AVAILABLE'")
+    List<Movie> findTopSuggestions(@Param("query") String query, Pageable pageable);
+
+    @Query("select c from Category c order by c.name desc")
+    List<Category> findAllCategory();
 }
